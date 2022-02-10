@@ -1,11 +1,11 @@
 # My Git aliases
 
-This repository shares my Git aliases which is a good fit into environment that:
+This repository shares my **Git aliases** which is a **good fit** into environment that:
 
-1. runs code review, which requires an intensive modification of the old commits
+1. **runs code review**, which requires an intensive modification of the old commits
     1. it allows a quick search, review and rebase of own commits on the current branch
-    1. it provides handy stash aliases to quickly save down the current work for future use, e.g. move the current work to a specific commit
-1. needs to search through the commits to find out the reference code/information to assist the development
+    1. it provides handy stash aliases to quickly save down the current work for future use, e.g. move the current work to a specific commit, help learn about the huge code base using trial-and-error approach
+1. **needs to search through the commits to find out the reference code/information** to assist the development
     1. it allows a quick search and review of the commits based on either their commit messages or content
 
 # Quick start
@@ -42,7 +42,7 @@ _Please note that this script does not only contain my aliases but also my basic
 
 # Tested environment
 
-1. zsh 5.8 (x86_64-apple-darwin21.0)
+1. zsh 5.8 (x86_64-apple-darwin21.0), git version 2.32.0
 1. Git Bash (mintty 3.5.2 (x86_64-pec-msys) [Windows 19043])
 
 [config-sh]: set-git-config.sh
