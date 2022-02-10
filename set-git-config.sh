@@ -48,7 +48,7 @@ git config --global alias.cfgl 'config --global --list'
 # [push]
 git config --global alias.ps 'push'
 git config --global alias.psu 'push -u'
-git config --global alias.psge '!sh -c '"'git push origin HEAD:refs/for/\"\$1\"' - " # push to Gerrit
+git config --global alias.psge '!sh -c '"'git push origin HEAD:refs/for/\"\$1\"' - " # git psge BRANCH-NAME; # this alias pushes to Gerrit and assumed the Gerrit remote branch is named as origin
 
 # [clone]
 git config --global alias.clo 'clone'
@@ -67,8 +67,8 @@ git config --global alias.remv 'remote -v'
 # [checkout]
 git config --global alias.co 'checkout'
 git config --global alias.cof 'checkout -f'
-git config --global alias.cofh '!sh -c '"'git checkout -f head\${1} \${@:2}' - " # git cofh \~1 pathspec
-git config --global alias.cofhc '!sh -c '"'git checkout -f head \${@:1}' - " # git cofhc pathspec
+git config --global alias.cofh '!sh -c '"'git checkout -f head\${1} \${@:2}' - " # e.g. git cofh \~1 PATH-SPEC; # the alias suffix 'h' means Head
+git config --global alias.cofhc '!sh -c '"'git checkout -f head \${@:1}' - " # git cofhc PATH-SPEC; # the alias suffix 'c' refers the commit Currently pointed by head
 git config --global alias.cob 'checkout -b'
 
 
@@ -88,7 +88,7 @@ git config --global alias.rbc 'rebase --continue'
 git config --global alias.rbs 'rebase --skip'
 git config --global alias.rbi 'rebase -i'
 git config --global alias.rbir 'rebase -i --root'
-git config --global alias.rbip '!sh -c '"'git rebase -i \"\$1\"~1' - " # rebase on the parent of the specified commit, e.g. on head~1~1 if head~1 is specified
+git config --global alias.rbip '!sh -c '"'git rebase -i \"\$1\"~1' - " # rebase on the parent of the specified commit, e.g. on head~1~1 if head~1 is specified; # the alias suffix 'p' refers to the Parent commit of the specified commit
 git config --global alias.rbihp '!sh -c '"'git rebase -i head\"\$1\"~1' - " # rebase on the parent of the specified commit, e.g. on head~2~1 if \~1 is specified
 
 # [cherry-pick]
@@ -113,8 +113,9 @@ git config --global alias.air 'git add --ignore-removal .'
 git config --global alias.l 'log'
 git config --global alias.lp 'log -p'
 
-## Search across all branches 
-### -S
+## Search across all branches
+### alias naming: <la>[o|p|st][r]<s|ge|gr>[i]
+#### -S 
 git config --global alias.las 'log --all -S'
 git config --global alias.lars 'log --all --reverse -S'
 
@@ -128,19 +129,19 @@ git config --global alias.laosi 'log --oneline --all -i -S' # --oneline -i
 git config --global alias.laorsi 'log --oneline --all --reverse -i -S'
 
 git config --global alias.laps 'log -p --all -S' # -p
-git config --global alias.larps 'log -p --all --reverse -S'
+git config --global alias.laprs 'log -p --all --reverse -S'
 
 git config --global alias.lapsi 'log -p --all -i -S' # -p -i
-git config --global alias.larpsi 'log -p --all --reverse -i -S'
+git config --global alias.laprsi 'log -p --all --reverse -i -S'
 
 git config --global alias.lasts 'log --stat --all -S' # --stat
-git config --global alias.larsts 'log -stat --all --reverse -S'
+git config --global alias.lastrs 'log -stat --all --reverse -S'
 
 git config --global alias.lastsi 'log --stat --all -i -S' # --stat -i
-git config --global alias.larstsi 'log --stat --all --reverse -i -S'
+git config --global alias.lastrsi 'log --stat --all --reverse -i -S'
 
-### -G
-git config --global alias.lage 'log --all -G'
+#### -G
+git config --global alias.lage 'log --all -G' # 'ge' in the alias name refers to the -G option (reGEx)
 git config --global alias.large 'log --all --reverse -G'
 
 git config --global alias.lagei 'log --all -i -G' # -i
@@ -153,18 +154,18 @@ git config --global alias.laogei 'log --oneline --all -i -G' # --oneline -i
 git config --global alias.laorgei 'log --oneline --all --reverse -i -G'
 
 git config --global alias.lapge 'log -p --all -G' # -p
-git config --global alias.larpge 'log -p --all --reverse -G'
+git config --global alias.laprge 'log -p --all --reverse -G'
 
 git config --global alias.lapgei 'log -p --all -i -G' # -p -i
-git config --global alias.larpgei 'log -p --all --reverse -i -G'
+git config --global alias.laprgei 'log -p --all --reverse -i -G'
 
 git config --global alias.lastge 'log --stat --all -G' # --stat
-git config --global alias.larstge 'log --stat --all --reverse -G'
+git config --global alias.lastrge 'log --stat --all --reverse -G'
 
 git config --global alias.lastgei 'log --stat --all -i -G' # --stat -i
-git config --global alias.larstgei 'log --stat --all --reverse -i -G'
+git config --global alias.lastrgei 'log --stat --all --reverse -i -G'
 
-### --grep
+#### --grep
 git config --global alias.lagr 'log --all --grep'
 git config --global alias.largr 'log --all --reverse --grep'
 
@@ -178,16 +179,16 @@ git config --global alias.laogri 'log --oneline --all -i --grep' # --oneline -i
 git config --global alias.laorgri 'log --oneline --all --reverse -i --grep'
 
 git config --global alias.lapgr 'log -p --all --grep' # -p
-git config --global alias.larpgr 'log -p --all --reverse --grep'
+git config --global alias.laprgr 'log -p --all --reverse --grep'
 
 git config --global alias.lapgri 'log -p --all -i --grep' # -p -i
-git config --global alias.larpgri 'log -p --all --reverse -i --grep'
+git config --global alias.laprgri 'log -p --all --reverse -i --grep'
 
 git config --global alias.lastgr 'log --stat --all --grep' # --stat
-git config --global alias.larstgr 'log -stat --all --reverse --grep'
+git config --global alias.lastrgr 'log -stat --all --reverse --grep'
 
 git config --global alias.lastgri 'log --stat --all -i --grep' # --stat -i
-git config --global alias.larstgri 'log --stat --all --reverse -i --grep'
+git config --global alias.lastrgri 'log --stat --all --reverse -i --grep'
 
 ## Graph
 git config --global alias.laog 'log --graph --oneline --all'
@@ -202,7 +203,7 @@ git config --global alias.lcos "log --committer '$myGitUserEmail' --oneline -S"
 git config --global alias.lcosi "log --committer '$myGitUserEmail' --oneline -i -S"
 git config --global alias.lcoge "log --committer '$myGitUserEmail' --oneline -G"
 git config --global alias.lcogei "log --committer '$myGitUserEmail' --oneline -i -G"
-git config --global alias.lcogrh "log --committer '$myGitUserEmail' --oneline --pretty='%h' --grep" # to get the commit hash for further git operation, e.g. rebase
+git config --global alias.lcogrh "log --committer '$myGitUserEmail' --oneline --pretty='%h' --grep" # to get the commit hash for further git operation, e.g. rebase; the alias suffix 'h' means Hash;
 git config --global alias.lcogrih "log --committer '$myGitUserEmail' --oneline --pretty='%h' -i --grep" # to get the commit hash
 git config --global alias.lcosh "log --committer '$myGitUserEmail' --oneline --pretty='%h' -S" # to get the commit hash
 git config --global alias.lcosih "log --committer '$myGitUserEmail' --oneline --pretty='%h' -i -S" # to get the commit hash
@@ -211,16 +212,16 @@ git config --global alias.lcogeih "log --committer '$myGitUserEmail' --oneline -
 
 ## Search for/list own commits and display the details through current working branch
 git config --global alias.lcst "log --committer '$myGitUserEmail' --stat"
-git config --global alias.lcp "log --committer '$myGitUserEmail' -p"
-git config --global alias.lcrp "log --committer '$myGitUserEmail' --reverse -p"
-git config --global alias.lcgrprp '!sh -c '"'git log --committer \"$myGitUserEmail\" --pretty=\"%h\" --grep \"\$1\" | xargs -o -I@ git log --reverse -p @~1..HEAD' - "
-git config --global alias.lcgriprp '!sh -c '"'git log --committer \"$myGitUserEmail\" --pretty=\"%h\" -i --grep \"\$1\" | xargs -o -I@ git log --reverse -p @~1..HEAD' - "
+git config --global alias.lcp "log --committer '$myGitUserEmail' -p" # extra info: to view the last commit changes only, git lcp -1
+git config --global alias.lcpr "log --committer '$myGitUserEmail' --reverse -p"
+git config --global alias.lcprgrp '!sh -c '"'git log --committer \"$myGitUserEmail\" --pretty=\"%h\" --grep \"\$1\" | xargs -o -I@ git log --reverse -p @~1..HEAD' - "
+git config --global alias.lcprgrip '!sh -c '"'git log --committer \"$myGitUserEmail\" --pretty=\"%h\" -i --grep \"\$1\" | xargs -o -I@ git log --reverse -p @~1..HEAD' - "
 
 ## Search for own commit through current working branch and then rebase on its parent
-git config --global alias.lcrb '!sh -c '"'git rebase -i \$(git log --committer \"$myGitUserEmail\" --oneline --reverse --pretty=\"%h\" | head -1)~1'" # rebase on the parent of your earliest commit on the current branch
-git config --global alias.lcgrrb '!sh -c '"'git log --committer \"$myGitUserEmail\" --pretty=\"%h\" --grep \"\$1\" | xargs -o -I@ git rebase -i @~1' - " # rebase on the parent of the search result
-git config --global alias.lcgrirb '!sh -c '"'git log --committer \"$myGitUserEmail\" --pretty=\"%h\" -i --grep \"\$1\" | xargs -o -I@ git rebase -i @~1' - " # rebase on the parent of the search result
-git config --global alias.awkrbip '!sh -c '"\"awk '{print \\\$1}' | xargs -o -I{} git rebase -i {}~1\"" # crop the commit hash from commands like `git log --oneline --grep xxx` and then rebase on its parent
+git config --global alias.lcrb '!sh -c '"'git rebase -i \$(git log --committer \"$myGitUserEmail\" --oneline --reverse --pretty=\"%h\" | head -1)~1'" # rebase on the parent of your earliest commit on the current branch. it will fail if no such parent.
+git config --global alias.lcgrrb '!sh -c '"'git log --committer \"$myGitUserEmail\" --pretty=\"%h\" --grep \"\$1\" | xargs -o -I@ git rebase -i @~1' - " # rebase on the parent of the search result. it will fail if no such parent.
+git config --global alias.lcgrirb '!sh -c '"'git log --committer \"$myGitUserEmail\" --pretty=\"%h\" -i --grep \"\$1\" | xargs -o -I@ git rebase -i @~1' - " # rebase on the parent of the search result. it will fail if no such parent.
+git config --global alias.awkrbip '!sh -c '"\"awk '{print \\\$1}' | xargs -o -I{} git rebase -i {}~1\"" # crop the commit hash from commands like `git log --oneline --grep xxx` and then rebase on its parent. it will fail if no such parent.
 
 # [status]
 git config --global alias.stt 'status'
@@ -283,7 +284,8 @@ git config --global alias.d 'diff'
 git config --global alias.dc 'diff --cached'
 
 # [show]
-git config --global alias.shw '!sh -c '"\"find . | grep -E '\$2' | xargs -o -I@ git show '\$1':@\" - " # git shw COMMIT FILEPATH-IN-REGEX
+git config --global alias.shw 'show'
+git config --global alias.shwcf '!sh -c '"\"find . | grep -E '\$2' | xargs -o -I@ git show '\$1':@\" - " # git shw COMMIT FILEPATH-IN-REGEX; # 'c' in the alias name means Commit and 'f' means Filepaths
 
 # [reset]
 git config --global alias.rs 'reset'
@@ -322,9 +324,9 @@ git config --global alias.cledxx 'clean -d -X'
 git config --global alias.clei 'clean -i'
 
 git config --global alias.clee 'clean -e' # -e, i.e. --exclude (to declare additional ignore rules)
-git config --global alias.clede 'clean -d -e' 
-git config --global alias.clexe 'clean -x -e' 
-git config --global alias.clexxe 'clean -X -e' 
+git config --global alias.clede 'clean -d -e'
+git config --global alias.clexe 'clean -x -e'
+git config --global alias.clexxe 'clean -X -e'
 git config --global alias.cledxe 'clean -d -x -e'
 git config --global alias.cledxxe 'clean -d -X -e'
 
