@@ -48,6 +48,8 @@ git config --global alias.cfgl 'config --global --list'
 # [push]
 git config --global alias.ps 'push'
 git config --global alias.psu 'push -u'
+git config --global alias.psta 'push --tags'
+git config --global alias.psd 'push -d'
 git config --global alias.psge '!sh -c '"'git push origin HEAD:refs/for/\"\$1\"' - " # git psge BRANCH-NAME; # this alias pushes to Gerrit and assumed the Gerrit remote branch is named as origin
 
 # [clone]
@@ -71,7 +73,6 @@ git config --global alias.cofh '!sh -c '"'git checkout -f head\${1} \${@:2}' - "
 git config --global alias.cofhc '!sh -c '"'git checkout -f head \${@:1}' - " # git cofhc PATH-SPEC; # the alias suffix 'c' refers the commit Currently pointed by head
 git config --global alias.cob 'checkout -b'
 
-
 # [reflog]
 git config --global alias.rl 'reflog'
 git config --global alias.rld 'reflog --date=relative'
@@ -89,6 +90,8 @@ git config --global alias.rbs 'rebase --skip'
 git config --global alias.rbed 'rebase --edit-to'
 git config --global alias.rbi 'rebase -i'
 git config --global alias.rbir 'rebase -i --root'
+## alias 'rbip' example:
+## say you have created a branch from master for a hot fix issue and you would like to edit your hot fix commits, `git rbip master` may help
 git config --global alias.rbip '!sh -c '"'git rebase -i \"\$1\"~1' - " # rebase on the parent of the specified commit, e.g. on head~1~1 if head~1 is specified; # the alias suffix 'p' refers to the Parent commit of the specified commit
 git config --global alias.rbihp '!sh -c '"'git rebase -i head\"\$1\"~1' - " # rebase on the parent of the specified commit, e.g. on head~2~1 if \~1 is specified
 
@@ -96,6 +99,7 @@ git config --global alias.rbihp '!sh -c '"'git rebase -i head\"\$1\"~1' - " # re
 git config --global alias.cp 'cherry-pick'
 git config --global alias.cpa 'cherry-pick --abort'
 git config --global alias.cpc 'cherry-pick --continue'
+git config --global alias.cps 'cherry-pick --skip'
 
 # [revert]
 git config --global alias.rvt 'revert'
@@ -113,48 +117,75 @@ git config --global alias.air 'git add --ignore-removal .'
 # [log]
 ## Basic
 git config --global alias.l 'log'
-git config --global alias.lp 'log -p'
-git config --global alias.lo 'log -o'
-git config --global alias.lst 'log --stat'
 
-## Search across all branches / (own commits) through current branch by commit messages / commit changes
+## Search across all branches / through current branch for (own) commits by commit messages / committed changes
+### usage: git ALIAS COMMIT-MSG-OR-COMMITED-CHANGES
 ### alias naming: <l>[a|c][o|p|st][r][i][s|ge|gr]
-logAliasesPart1=(':' 'a:--all' "c:--committer \"$myGitUserEmail\"")
-logAliasesPart2=(':' 'o:--oneline' 'p:-p' 'st:--stat')
-logAliasesPart3=(':' 'r:--reverse')
-logAliasesPart4=(':' 'i:-i')
-logAliasesPart5=(':' 's:-S' 'ge:-G' 'gr:--grep')
-for p1 in $logAliasesPart1
+(
+logAliasesPart2=(':' 'a:--all' "c:--committer \"$myGitUserEmail\"")
+logAliasesPart3=(':' 'o:--oneline' 'p:-p' 'st:--stat')
+logAliasesPart4=(':' 'r:--reverse')
+logAliasesPart5=(':' 'i:-i')
+logAliasesPart6=(':' 's:-S' 'ge:-G' 'gr:--grep')
+for p2 in "${logAliasesPart2[@]}"
 do
-    for p2 in $logAliasesPart2
+    for p3 in "${logAliasesPart3[@]}"
     do
-        for p3 in $logAliasesPart3
+        for p4 in "${logAliasesPart4[@]}"
         do
-            for p4 in $logAliasesPart4
+            for p5 in "${logAliasesPart5[@]}"
+            do
+                for p6 in "${logAliasesPart6[@]}"
                 do
-                for p5 in $logAliasesPart5
-                do
-                    aliasName="l${p1%:*}${p2%:*}${p3%:*}${p4%:*}${p5%:*}"
-                    aliasCmd="log ${p1#*:} ${p2#*:} ${p3#*:} ${p4#*:} ${p5#*:}"
-                    sh -c "git config --global alias.${aliasName} '$(echo -e $aliasCmd | awk '{$1=$1}1')'"
+                    aliasName="l${p2%:*}${p3%:*}${p4%:*}${p5%:*}${p6%:*}"
+                    aliasCmd=$(echo -e "log ${p2#*:} ${p3#*:} ${p4#*:} ${p5#*:} ${p6#*:}" | awk '{$1=$1}1')
+                    sh -c "git config --global alias.${aliasName} '${aliasCmd}'"
                 done
             done
         done
     done
 done
+)
+
+## List all (own) commits SINCE a specific commit on the current branch
+### usage: git ALIAS COMMIT-POINTER-OR-COMMIT-HASH
+### alias naming: <l>[c][o|p|st][r]<ph>
+### alias suffix 'ph' means from the Parent of the specified to Head, i.e. ${1}~1..head below
+### example: say you have created a branch from master for a hot fix issue and you would like to review only your hot fix commits, `git lprpa master` may help
+(
+logAliasesPart2=(':' "c:--committer \"$myGitUserEmail\"")
+logAliasesPart3=(':' 'o:--oneline' 'p:-p' 'st:--stat')
+logAliasesPart4=(':' 'r:--reverse')
+for p2 in "${logAliasesPart2[@]}"
+do
+    for p3 in "${logAliasesPart3[@]}"
+    do
+        for p4 in "${logAliasesPart4[@]}"
+        do
+            aliasName="l${p2%:*}${p3%:*}${p4%:*}ph"
+            aliasCmd=$(echo -e "${p2#*:} ${p3#*:} ${p4#*:}" | awk '{$1=$1}1')
+            aliasCmd="\"git log ${aliasCmd} \${1}~1..head\"" # PARENT-OF-SPECIFIED-COMMIT..head instead of SPECIFIED-COMMIT..head to include the specified commit in the log view
+            aliasCmd='!sh -c '"${aliasCmd}"' - '
+            sh -c "git config --global alias.${aliasName} '${aliasCmd}'"
+        done
+    done
+done
+)
+### usage: git ALIAS COMMIT-MSG
+git config --global alias.lcprgrph '!sh -c '"'git log --committer \"$myGitUserEmail\" --pretty=\"%h\" --grep \"\$1\" | xargs -o -I@ git log --reverse -p @~1..HEAD' - "
+git config --global alias.lcprigrph '!sh -c '"'git log --committer \"$myGitUserEmail\" --pretty=\"%h\" -i --grep \"\$1\" | xargs -o -I@ git log --reverse -p @~1..HEAD' - "
+
+## Search for own commit and rebase on its parent
+### usage: git ALIAS
+git config --global alias.lcrbp '!sh -c '"'git rebase -i \$(git log --committer \"$myGitUserEmail\" --oneline --reverse --pretty=\"%h\" | head -1)~1'" # rebase on the parent of your earliest commit on the current branch. it will fail if no such parent.
+### usage: git ALIAS COMMIT-MSG
+git config --global alias.lcgrrbp '!sh -c '"'git log --committer \"$myGitUserEmail\" --pretty=\"%h\" --grep \"\$1\" -1 | xargs -o -I@ git rebase -i @~1' - " # rebase on the parent of the 1st search result. it will fail if no such parent.
+git config --global alias.lcigrrbp '!sh -c '"'git log --committer \"$myGitUserEmail\" --pretty=\"%h\" -i --grep \"\$1\" -1 | xargs -o -I@ git rebase -i @~1' - " # rebase on the parent of the 1st search result. it will fail if no such parent.
+### usage: git log ... | git ALIAS
+git config --global alias.awkrbip '!sh -c '"\"awk 'NR=1{print \\\$1}' | xargs -o -I{} git rebase -i {}~1\"" # crop the commit hash from the 1st line of previous git command output and rebase on its parent. it will fail if no such parent.
 
 ## Graph
 git config --global alias.laog 'log --graph --oneline --all'
-
-## Show own recent commits since a specific commit in chronological order
-git config --global alias.lcprgrp '!sh -c '"'git log --committer \"$myGitUserEmail\" --pretty=\"%h\" --grep \"\$1\" | xargs -o -I@ git log --reverse -p @~1..HEAD' - " # git lcprgrp EARLIEST-COMMIT(YOURS)-IN-THIS-VIEW
-git config --global alias.lcprigrp '!sh -c '"'git log --committer \"$myGitUserEmail\" --pretty=\"%h\" -i --grep \"\$1\" | xargs -o -I@ git log --reverse -p @~1..HEAD' - " # git lcprigrp EARLIEST-COMMIT(YOURS)-IN-THIS-VIEW
-
-## rebase to modify own commits
-git config --global alias.lcrb '!sh -c '"'git rebase -i \$(git log --committer \"$myGitUserEmail\" --oneline --reverse --pretty=\"%h\" | head -1)~1'" # rebase on the parent of your earliest commit on the current branch. it will fail if no such parent.
-git config --global alias.lcgrrb '!sh -c '"'git log --committer \"$myGitUserEmail\" --pretty=\"%h\" --grep \"\$1\" | xargs -o -I@ git rebase -i @~1' - " # rebase on the parent of the search result. it will fail if no such parent.
-git config --global alias.lcigrrb '!sh -c '"'git log --committer \"$myGitUserEmail\" --pretty=\"%h\" -i --grep \"\$1\" | xargs -o -I@ git rebase -i @~1' - " # rebase on the parent of the search result. it will fail if no such parent.
-git config --global alias.awkrbip '!sh -c '"\"awk '{print \\\$1}' | xargs -o -I{} git rebase -i {}~1\"" # crop the commit hash from commands like `git log --oneline --grep xxx` and then rebase on its parent. it will fail if no such parent.
 
 # [status]
 git config --global alias.stt 'status'
@@ -227,6 +258,14 @@ git config --global alias.rss 'reset --soft'
 
 # [reset]
 git config --global alias.rto 'restore'
+
+# [tag]
+# making a good use of tag would allow a quick Git operation, e.g. git rbip TAG-OF-MY-EARLIEST-COMMIT-FOR-CURRENT-TASK
+git config --global alias.t 'tag'
+git config --global alias.ta 'tag -a'
+git config --global alias.tf 'tag -f'
+git config --global alias.tam '!sh -c '"'git tag -a \"\$1\" -m \"\$2\"' - "
+git config --global alias.td 'tag -d'
 
 # [submodule]
 git config --global alias.sm 'submodule'
