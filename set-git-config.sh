@@ -20,6 +20,7 @@ git config --global core.longpaths true
 # -- alias --
 
 # clear git aliases to remove all obsolete or renamed aliases
+(
 gitConfigPath=${HOME}/.gitconfig
 
 gitSectionStartLines=$(grep -En '^\[' $gitConfigPath)
@@ -38,6 +39,7 @@ then
     gitConfigWithoutAlias=$(awk "{if ($aliasSectionStartLine > NR || NR > $aliasSectionEndLine) print}" $gitConfigPath)
     echo "$gitConfigWithoutAlias" > $gitConfigPath
 fi
+)
 
 # [config]
 git config --global alias.cf 'config'
@@ -72,6 +74,14 @@ git config --global alias.cof 'checkout -f'
 git config --global alias.cofh '!sh -c '"'git checkout -f head\${1} \${@:2}' - " # e.g. git cofh \~1 PATH-SPEC; # the alias suffix 'h' means Head
 git config --global alias.cofhc '!sh -c '"'git checkout -f head \${@:1}' - " # git cofhc PATH-SPEC; # the alias suffix 'c' refers the commit Currently pointed by head
 git config --global alias.cob 'checkout -b'
+git config --global alias.coou 'checkout --ours'
+git config --global alias.coth 'checkout --theirs'
+
+# [merge]
+git config --global alias.me 'merge'
+git config --global alias.mec 'merge --continue'
+git config --global alias.mea 'merge --abort'
+git config --global alias.meq 'merge --quit'
 
 # [reflog]
 git config --global alias.rl 'reflog'
@@ -121,6 +131,7 @@ git config --global alias.l 'log'
 ## Search across all branches / through current branch for (own) commits by commit messages / committed changes
 ### usage: git ALIAS COMMIT-MSG-OR-COMMITED-CHANGES
 ### alias naming: <l>[a|c][o|p|st][r][i][s|ge|gr]
+### example: when you would like to read the commit message for a specific line of code, `git las 'THE-LINE-OF-CODE'` may help
 (
 logAliasesPart2=(':' 'a:--all' "c:--committer \"$myGitUserEmail\"")
 logAliasesPart3=(':' 'o:--oneline' 'p:-p' 'st:--stat')
@@ -150,7 +161,7 @@ done
 ## List all (own) commits SINCE a specific commit on the current branch
 ### usage: git ALIAS COMMIT-POINTER-OR-COMMIT-HASH
 ### alias naming: <l>[c][o|p|st][r]<ph>
-### alias suffix 'ph' means from the Parent of the specified to Head, i.e. ${1}~1..head below
+### alias suffix 'ph' means from the Parent of the specified commit to Head, i.e. ${1}~1..head below
 ### example: say you have created a branch from master for a hot fix issue and you would like to review only your hot fix commits, `git lprpa master` may help
 (
 logAliasesPart2=(':' "c:--committer \"$myGitUserEmail\"")
@@ -189,6 +200,8 @@ git config --global alias.laog 'log --graph --oneline --all'
 
 # [status]
 git config --global alias.stt 'status'
+git config --global alias.sttun 'status -uno' # do not show the untracked files
+git config --global alias.sttua 'status -uall'
 git config --global alias.sttv 'status -v'
 
 # [stash]
@@ -244,15 +257,28 @@ git config --global alias.rshqstsai '!sh -c '"'git reset --hard -q && git stash 
 git config --global alias.rmc 'rm --cached'
 
 # [diff]
+# suggested to call below aliases to check your change before making a new commit or amending your previous commit, especially when there is time-consuming git-hook work for commit
 git config --global alias.d 'diff'
 git config --global alias.dc 'diff --cached'
+git config --global alias.dh 'diff head'
+git config --global alias.dch 'diff --cached head'
+git config --global alias.dhp 'diff head~1'
+git config --global alias.dchp 'diff --cached head~1'
+
+git config --global alias.dnus 'diff --numstat'
+git config --global alias.dcnus 'diff --cached --numstat'
+git config --global alias.dnush 'diff --numstat head'
+git config --global alias.dcnush 'diff --cached --numstat head'
+git config --global alias.dnushp 'diff --numstat head~1'
+git config --global alias.dcnushp 'diff --cached --numstat head~1'
 
 # [show]
 git config --global alias.shw 'show'
-git config --global alias.shwcf '!sh -c '"\"find . | grep -E '\$2' | xargs -o -I@ git show '\$1':@\" - " # git shw COMMIT FILEPATH-IN-REGEX; # 'c' in the alias name means Commit and 'f' means Filepaths
+git config --global alias.lfshw '!sh -c '"\"git ls-files -- '\$2' | xargs -o -I@ git show '\$1':@\" - " # git shw COMMIT FILE
 
 # [reset]
-git config --global alias.rs 'reset'
+git config --global alias.rs 'reset' # pls rmb to enclose your argument with quotes or prepend * with \; otherwise, * will be firstly expanded by your shell before passing to Git
+
 git config --global alias.rsh 'reset --hard'
 git config --global alias.rss 'reset --soft'
 
@@ -263,6 +289,7 @@ git config --global alias.rto 'restore'
 # making a good use of tag would allow a quick Git operation, e.g. git rbip TAG-OF-MY-EARLIEST-COMMIT-FOR-CURRENT-TASK
 git config --global alias.t 'tag'
 git config --global alias.ta 'tag -a'
+git config --global alias.tl 'tag -l' # pls rmb to enclose your argument with quotes or prepend * with \; otherwise, * will be firstly expanded by your shell before passing to Git
 git config --global alias.tf 'tag -f'
 git config --global alias.tam '!sh -c '"'git tag -a \"\$1\" -m \"\$2\"' - "
 git config --global alias.td 'tag -d'
@@ -314,5 +341,6 @@ git config --global alias.cledxxesh 'clean -d -X -e *.sh -e *.bat'
 
 # [blame]
 git config --global alias.bl 'blame'
+git config --global alias.lfbl '!sh -c '"'git ls-files -- '\$1' | xargs git blame' - "
 
 # [company's specific need, e.g. set git hooks]
