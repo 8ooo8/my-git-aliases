@@ -66,7 +66,7 @@ git config --global alias.fe 'fetch'
 
 # [remote]
 git config --global alias.rem 'remote'
-git config --global alias.rev 'remote -v'
+git config --global alias.remv 'remote -v'
 
 # [checkout]
 git config --global alias.co 'checkout'
@@ -159,32 +159,45 @@ done
 )
 
 ## List all (own) commits SINCE a specific commit on the current branch
-### usage: git ALIAS COMMIT-POINTER-OR-COMMIT-HASH
-### alias naming: <l>[c][o|p|st][r]<ph>
+### alias naming: <l>[c][o|p|st][r][i][s|ge|gr]<ph>
 ### alias suffix 'ph' means from the Parent of the specified commit to Head, i.e. ${1}~1..head below
 ### example: say you have created a branch from master for a hot fix issue and you would like to review only your hot fix commits, `git lprpa master` may help
 (
 logAliasesPart2=(':' "c:--committer \"$myGitUserEmail\"")
 logAliasesPart3=(':' 'o:--oneline' 'p:-p' 'st:--stat')
 logAliasesPart4=(':' 'r:--reverse')
+logAliasesPart5=(':' 's:-S' 'ge:-G' 'gr:--grep' 'is:-i -S' 'ige:-i -G' 'igr:-i --grep')
 for p2 in "${logAliasesPart2[@]}"
 do
     for p3 in "${logAliasesPart3[@]}"
     do
         for p4 in "${logAliasesPart4[@]}"
         do
-            aliasName="l${p2%:*}${p3%:*}${p4%:*}ph"
-            aliasCmd=$(echo -e "${p2#*:} ${p3#*:} ${p4#*:}" | awk '{$1=$1}1')
-            aliasCmd="\"git log ${aliasCmd} \${1}~1..head\"" # PARENT-OF-SPECIFIED-COMMIT..head instead of SPECIFIED-COMMIT..head to include the specified commit in the log view
-            aliasCmd='!sh -c '"${aliasCmd}"' - '
-            sh -c "git config --global alias.${aliasName} '${aliasCmd}'"
+            for p5 in "${logAliasesPart5[@]}"
+            do
+                if [[ -z "$(echo $p5 | sed 's/://')" ]]
+                then
+                    #### alias naming: <l>[c][o|p|st][r]<ph>
+                    #### usage: git ALIAS COMMIT-POINTER-OR-COMMIT-HASH
+                    aliasName="l${p2%:*}${p3%:*}${p4%:*}ph"
+                    aliasCmd="${p2#*:} ${p3#*:} ${p4#*:}"
+                    aliasCmd="\"git log ${aliasCmd} \${1}~1..head\"" # PARENT-OF-SPECIFIED-COMMIT..head instead of SPECIFIED-COMMIT..head to include the specified commit in the log view
+                    aliasCmd='!sh -c '"${aliasCmd}"' - '
+                    sh -c "git config --global alias.${aliasName} '${aliasCmd}'"
+                else
+                    #### alias naming: <l>[c][o|p|st][r][i]<s|ge|gr><ph>
+                    #### usage: git ALIAS COMMIT-MSG-OR-COMMITTED-CHNAGES
+                    aliasName="l${p2%:*}${p3%:*}${p4%:*}${p5%:*}ph"
+                    aliasCmdPart1="git log ${p2#*:} ${p5#*:} '\\\${1}' --pretty='%h' | head -1" # get the most recent commit among the search result
+                    aliasCmdPart2="xargs -o -I{} git log ${p2#*:} ${p3#*:} ${p4#*:} {}~1..head"
+                    aliasCmd="'"'!sh -c '"'\"\\\"${aliasCmdPart1} | ${aliasCmdPart2}\\\"\"' - '"
+                    sh -c "git config --global alias.${aliasName} ${aliasCmd}" # e.g. git lorigrph '\[ver\]'
+                fi
+            done
         done
     done
 done
 )
-### usage: git ALIAS COMMIT-MSG
-git config --global alias.lcprgrph '!sh -c '"'git log --committer \"$myGitUserEmail\" --pretty=\"%h\" --grep \"\$1\" | xargs -o -I@ git log --reverse -p @~1..HEAD' - "
-git config --global alias.lcprigrph '!sh -c '"'git log --committer \"$myGitUserEmail\" --pretty=\"%h\" -i --grep \"\$1\" | xargs -o -I@ git log --reverse -p @~1..HEAD' - "
 
 ## Search for own commit and rebase on its parent
 ### usage: git ALIAS
@@ -206,6 +219,7 @@ git config --global alias.sttv 'status -v'
 
 # [stash]
 ## push
+## alias naming: <sts> or <stsps>[u|a][k][m]
 stashPushAlias='stsps'
 sh -c "git config --global alias.${stashPushAlias} 'stash'"
 git config --global alias.sts 'stash' # shorthand alternative for stash push
@@ -257,7 +271,8 @@ git config --global alias.rshqstsai '!sh -c '"'git reset --hard -q && git stash 
 git config --global alias.rmc 'rm --cached'
 
 # [diff]
-# suggested to call below aliases to check your change before making a new commit or amending your previous commit, especially when there is time-consuming git-hook work for commit
+## suggested to call below aliases to check your change before making a new commit or amending your previous commit, especially when there is time-consuming git-hook work for commit
+## alias naming: <d>[c][nus][h|hp]
 git config --global alias.d 'diff'
 git config --global alias.dc 'diff --cached'
 git config --global alias.dh 'diff head'
@@ -289,9 +304,9 @@ git config --global alias.rto 'restore'
 # making a good use of tag would allow a quick Git operation, e.g. git rbip TAG-OF-MY-EARLIEST-COMMIT-FOR-CURRENT-TASK
 git config --global alias.t 'tag'
 git config --global alias.ta 'tag -a'
+git config --global alias.tam '!sh -c '"'git tag -a \"\$1\" -m \"\$2\"' - "
 git config --global alias.tl 'tag -l' # pls rmb to enclose your argument with quotes or prepend * with \; otherwise, * will be firstly expanded by your shell before passing to Git
 git config --global alias.tf 'tag -f'
-git config --global alias.tam '!sh -c '"'git tag -a \"\$1\" -m \"\$2\"' - "
 git config --global alias.td 'tag -d'
 
 # [submodule]
@@ -299,8 +314,8 @@ git config --global alias.sm 'submodule'
 git config --global alias.smui 'submodule update --init'
 
 # [branch]
+## alias naming: <br>[a][l|v|vv]
 git config --global alias.br 'branch'
-
 git config --global alias.brl 'branch -l'
 git config --global alias.brv 'branch -v'
 git config --global alias.brvv 'branch -vv'
@@ -310,13 +325,15 @@ git config --global alias.bral 'branch -al'
 git config --global alias.brav 'branch -av'
 git config --global alias.bravv 'branch -avvv'
 
-git config --global alias.brf 'branch -f'
-git config --global alias.brm 'branch -m'
+## alias naming: <br><f|m|d|dd>
+git config --global alias.brf 'branch -f' # change to point to another commit; git brf <BRANCH-NAME> [<NEW-TIP-COMMIT>];
+GIT config --global alias.brm 'branch -m' # rename branch; git brm <NEW-NAME|<OLD-NAME> <NEW-NAME>>;
 git config --global alias.brd 'branch -d'
 git config --global alias.brdd 'branch -D'
 
 # [clean]
-# It is suggested to perform a dry-run first with -n
+## It is suggested to perform a dry-run first with -n
+## alias naming: <cle>[[d][x|xx][e|esh]|i]
 git config --global alias.cle 'clean' # remove non-ignored files
 git config --global alias.cled 'clean -d' # also remove directories
 git config --global alias.clex 'clean -x' # remove ignored as well as non-ignored files
