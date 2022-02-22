@@ -121,6 +121,7 @@ git config --global alias.rvts 'revert --skip'
 git config --global alias.a 'add'
 git config --global alias.aa 'add -A'
 git config --global alias.au 'add -u'
+git config --global alias.ap 'add -p'
 git config --global alias.ai 'add -i'
 git config --global alias.air 'git add --ignore-removal .'
 
@@ -359,5 +360,8 @@ git config --global alias.cledxxesh 'clean -d -X -e *.sh -e *.bat'
 # [blame]
 git config --global alias.bl 'blame'
 git config --global alias.lfbl '!sh -c '"'git ls-files -- '\$1' | xargs git blame' - "
+
+# [apply]
+git config --global alias.app 'apply'
 
 # [company's specific need, e.g. set git hooks]
