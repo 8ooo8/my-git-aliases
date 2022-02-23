@@ -71,8 +71,10 @@ git config --global alias.remv 'remote -v'
 # [checkout]
 git config --global alias.co 'checkout'
 git config --global alias.cof 'checkout -f'
-git config --global alias.cofh '!sh -c '"'git checkout -f head\${1} \${@:2}' - " # e.g. git cofh \~1 PATH-SPEC; # the alias suffix 'h' means Head
-git config --global alias.cofhc '!sh -c '"'git checkout -f head \${@:1}' - " # git cofhc PATH-SPEC; # the alias suffix 'c' refers the commit Currently pointed by head
+git config --global alias.cofh '!sh -c '"'git checkout -f head\${1} -- \${@:2}' - " # e.g. git cofh \~1 PATH-SPEC; # the alias suffix 'h' means Head
+git config --global alias.cofhc '!sh -c '"'git checkout -f head -- \${@:1}' - " # git cofhc PATH-SPEC; # the alias suffix 'c' refers the commit Currently pointed by head
+git config --global alias.coph '!sh -c '"'git checkout -p head\${1} -- \${@:2}' - " # e.g. git coph \~1 [PATH-SPEC]
+git config --global alias.cophc '!sh -c '"'git checkout -p head -- \${@:1}' - " # git cophc [PATH-SPEC]
 git config --global alias.cob 'checkout -b'
 git config --global alias.coou 'checkout --ours'
 git config --global alias.coth 'checkout --theirs'
@@ -88,9 +90,19 @@ git config --global alias.rl 'reflog'
 git config --global alias.rld 'reflog --date=relative'
 
 # [commit]
+## alias naming: <cm>[a|p][amd|m]
 git config --global alias.cm 'commit'
 git config --global alias.cmm 'commit -m'
-git config --global alias.cma 'commit --amend'
+git config --global alias.cmamd 'commit --amend'
+
+git config --global alias.cma 'commit -a'
+git config --global alias.cmp 'commit -p' # git cmp [PATHSPEC]
+
+git config --global alias.cmam 'commit -a -m' # git cmam COMMIT-MSG
+git config --global alias.cmpm 'commit -p -m' # git cmpm COMMIT-MSG [PATHSPEC]
+
+git config --global alias.cmaamd 'commit -a --amend'
+git config --global alias.cmpamd 'commit -p --amend'
 
 # [rebase]
 git config --global alias.rb 'rebase'
@@ -127,12 +139,15 @@ git config --global alias.air 'git add --ignore-removal .'
 
 # [log]
 ## Basic
+## example: say you have created a branch from master for a hot fix issue and you would like to view the commits made for the issue, `git l master..` may help
 git config --global alias.l 'log'
 
 ## Search across all branches / through current branch for (own) commits by commit messages / committed changes
 ### usage: git ALIAS COMMIT-MSG-OR-COMMITED-CHANGES
 ### alias naming: <l>[a|c][o|p|st][r][i][s|ge|gr]
 ### example: when you would like to read the commit message for a specific line of code, `git las 'THE-LINE-OF-CODE'` may help
+### example: say you would like to view all your commits on the current branch, `git lco` may help
+### example: say you would like to view your last committed changes, `git lp -1` may help
 (
 logAliasesPart2=(':' 'a:--all' "c:--committer \"$myGitUserEmail\"")
 logAliasesPart3=(':' 'o:--oneline' 'p:-p' 'st:--stat')
@@ -162,7 +177,7 @@ done
 ## List all (own) commits SINCE a specific commit on the current branch
 ### alias naming: <l>[c][o|p|st][r][i][s|ge|gr]<ph>
 ### alias suffix 'ph' means from the Parent of the specified commit to Head, i.e. ${1}~1..head below
-### example: say you have created a branch from master for a hot fix issue and you would like to review only your hot fix commits, `git lprpa master` may help
+### example: say you have created a branch from master for a hot fix issue and you would like to review only your hot fix commits, `git lprph master` may help
 (
 logAliasesPart2=(':' "c:--committer \"$myGitUserEmail\"")
 logAliasesPart3=(':' 'o:--oneline' 'p:-p' 'st:--stat')
@@ -260,7 +275,8 @@ git config --global alias.stsd 'stash drop'
 git config --global alias.stsc 'stash clear'
 
 ## Checkout specific file(s) in a specific stash entry
-git config --global alias.stscoff '!sh -c '"'git checkout -f stash@{\$1} \${@:2}' - " # git stscoff STASH-ENTRY-NUMBER FILEPATH
+git config --global alias.stscoff '!sh -c '"'git checkout -f stash@{\$1:-0} -- \${@:2}' - " # git stscoff STASH-ENTRY-NUMBER PATHSPEC; # defailt stash@{0}
+git config --global alias.stscopf '!sh -c '"'git checkout -p stash@{\$1:-0} -- \${@:2}' - " # git stscopf STASH-ENTRY-NUMBER [PATHSPEC]; # default stash@{0}
 
 ## stash > stash apply
 git config --global alias.sts-aiq '!sh -c '"'git ${stashPushAlias}\"\$@\" && git stash apply --index -q' - " # git sts-aiq [SUFFIX-TO-FORM-STASH-PUSH-ALIAS [ARGUMENTS-TO-STASH-PUSH]]
