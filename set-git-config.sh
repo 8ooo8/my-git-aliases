@@ -70,11 +70,13 @@ git config --global alias.remv 'remote -v'
 
 # [checkout]
 git config --global alias.co 'checkout'
+## alias naming: <co><f|p>[h|hc]
 git config --global alias.cof 'checkout -f'
 git config --global alias.cofh '!sh -c '"'git checkout -f head\${1} -- \${@:2}' - " # e.g. git cofh \~1 PATH-SPEC; # the alias suffix 'h' means Head
 git config --global alias.cofhc '!sh -c '"'git checkout -f head -- \${@:1}' - " # git cofhc PATH-SPEC; # the alias suffix 'c' refers the commit Currently pointed by head
 git config --global alias.coph '!sh -c '"'git checkout -p head\${1} -- \${@:2}' - " # e.g. git coph \~1 [PATH-SPEC]
 git config --global alias.cophc '!sh -c '"'git checkout -p head -- \${@:1}' - " # git cophc [PATH-SPEC]
+## alias naming: <co><b|ou|th>
 git config --global alias.cob 'checkout -b'
 git config --global alias.coou 'checkout --ours'
 git config --global alias.coth 'checkout --theirs'
@@ -90,10 +92,10 @@ git config --global alias.rl 'reflog'
 git config --global alias.rld 'reflog --date=relative'
 
 # [commit]
-## alias naming: <cm>[a|p][amd|m]
+## alias naming: <cm>[a|p][ad|m]
 git config --global alias.cm 'commit'
 git config --global alias.cmm 'commit -m'
-git config --global alias.cmamd 'commit --amend'
+git config --global alias.cmad 'commit --amend'
 
 git config --global alias.cma 'commit -a'
 git config --global alias.cmp 'commit -p' # git cmp [PATHSPEC]
@@ -101,8 +103,8 @@ git config --global alias.cmp 'commit -p' # git cmp [PATHSPEC]
 git config --global alias.cmam 'commit -a -m' # git cmam COMMIT-MSG
 git config --global alias.cmpm 'commit -p -m' # git cmpm COMMIT-MSG [PATHSPEC]
 
-git config --global alias.cmaamd 'commit -a --amend'
-git config --global alias.cmpamd 'commit -p --amend'
+git config --global alias.cmaad 'commit -a --amend'
+git config --global alias.cmpad 'commit -p --amend'
 
 # [rebase]
 git config --global alias.rb 'rebase'
@@ -264,7 +266,8 @@ git config --global alias.stsa 'stash apply'
 git config --global alias.stsai 'stash apply --index' # --index tries to also reinstate the index
 
 ## show
-git config --global alias.stssh 'stash show'
+### alias naming: <stssh>[p][u]
+git config --global alias.stssh 'stash show' # e.g. git stssh; git stssh 1;
 git config --global alias.stsshu 'stash show -u' # -u, i.e. --include-untracked
 git config --global alias.stsshp 'stash show -p'
 git config --global alias.stsshpu 'stash show -p -u'
@@ -275,17 +278,14 @@ git config --global alias.stsd 'stash drop'
 git config --global alias.stsc 'stash clear'
 
 ## Checkout specific file(s) in a specific stash entry
-git config --global alias.stscoff '!sh -c '"'git checkout -f stash@{\$1:-0} -- \${@:2}' - " # git stscoff STASH-ENTRY-NUMBER PATHSPEC; # defailt stash@{0}
-git config --global alias.stscopf '!sh -c '"'git checkout -p stash@{\$1:-0} -- \${@:2}' - " # git stscopf STASH-ENTRY-NUMBER [PATHSPEC]; # default stash@{0}
+git config --global alias.stscof '!sh -c '"'git checkout -f stash@{\$1:-0} -- \${@:2}' - " # git stscof STASH-ENTRY-NUMBER PATHSPEC; # defailt stash@{0}
+git config --global alias.stscop '!sh -c '"'git checkout -p stash@{\$1:-0} -- \${@:2}' - " # git stscop STASH-ENTRY-NUMBER [PATHSPEC]; # default stash@{0}
 
 ## stash > stash apply
 git config --global alias.sts-aiq '!sh -c '"'git ${stashPushAlias}\"\$@\" && git stash apply --index -q' - " # git sts-aiq [SUFFIX-TO-FORM-STASH-PUSH-ALIAS [ARGUMENTS-TO-STASH-PUSH]]
 
 ## reset --hard > stash apply
 git config --global alias.rshqstsai '!sh -c '"'git reset --hard -q && git stash apply --index \"\${1:-0}\"' - " # git rshqstsa STASH-ENTRY; # default stash@{0}
-
-# [rm]
-git config --global alias.rmc 'rm --cached'
 
 # [diff]
 ## suggested to call below aliases to check your change before making a new commit or amending your previous commit, especially when there is time-consuming git-hook work for commit
