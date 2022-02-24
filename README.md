@@ -18,21 +18,25 @@ _Please note that this script is still frequently updated and not yet come to it
     ```
 1. modify [set-git-config.sh][config-sh]
     1. ensure it correctly points to your Bash or Zsh
-    ```zsh
-    #!/bin/zsh
-    ```
+        ```zsh
+        #!/bin/zsh
+        ```
+        1. check the shell currently in use if needed
+            ```zsh
+            echo $SHELL
+            ```
     1. write down your username, email, favourite editor and pager
-    ```zsh
-    myGitUserName='8ooo8'
-    myGitUserEmail='ben.cky.workspace@gmail.com'
-    myEditor='nvim'
-    myPager='less'
-    ```
+        ```zsh
+        myGitUserName='8ooo8'
+        myGitUserEmail='ben.cky.workspace@gmail.com'
+        myEditor='nvim'
+        myPager='less'
+        ```
     1. add your own aliases or/and configuration, possibly specific for your company, e.g. set the git hooks
-    ```zsh
-    # [company's specific need, e.g. set git hooks]
-    # your own aliases or/and configuration for your company
-    ```
+        ```zsh
+        # [company's specific need, e.g. set git hooks]
+        # your own aliases or/and configuration for your company
+        ```
 1. set execution right for [set-git-config.sh][config-sh]
     ```zsh
     chmod +x set-git-config.sh
