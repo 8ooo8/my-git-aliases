@@ -334,14 +334,14 @@ git config --global alias.rto 'restore'
 
 # [tag]
 # alias naming: <t>[a][m|f]
-git config --global alias.t 'tag' # git t <TAG-NAME> [COMMIT(S)]; default: current commit
+git config --global alias.t 'tag' # git t <TAG-NAME> [COMMIT]; default: current commit
 git config --global alias.ta 'tag -a'
 git config --global alias.tam '!sh -c '"'git tag -a \"\$1\" -m \"\$2\"' - " # git tam <TAG-NAME> <TAG-MESSAGE>
 git config --global alias.tf 'tag -f' # git tf <TAG-NAME> [commit]; make a tag pointing to another commit, which by default is head
 git config --global alias.taf 'tag -af' # move a tag and force-create an annotated tag
 # alias naming: <t><l|d>
 git config --global alias.tl 'tag -l' # pls rmb to enclose your argument with quotes or prepend * with \; otherwise, * will be firstly expanded by your shell before passing to Git
-git config --global alias.td 'tag -d' # git td <TAG-NAME>; delete a tag in the local repository
+git config --global alias.td 'tag -d' # git td <TAG-NAME(S)>; delete a tag in the local repository
 
 # [submodule]
 git config --global alias.sm 'submodule'
