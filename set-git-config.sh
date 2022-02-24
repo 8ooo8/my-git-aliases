@@ -52,7 +52,7 @@ git config --global alias.ps 'push'
 git config --global alias.psu 'push -u'
 git config --global alias.psta 'push --tags'
 git config --global alias.psd 'push -d'
-git config --global alias.psge '!sh -c '"'git push origin HEAD:refs/for/\"\$1\"' - " # git psge BRANCH-NAME; # this alias pushes to Gerrit and assumed the Gerrit remote branch is named as origin
+git config --global alias.psge '!sh -c '"'git push origin HEAD:refs/for/\"\$1\"' - " # git psge <BRANCH-NAME>; this alias pushes to Gerrit and assumed the Gerrit remote branch is named as origin
 
 # [clone]
 git config --global alias.clo 'clone'
@@ -70,15 +70,17 @@ git config --global alias.remv 'remote -v'
 
 # [checkout]
 git config --global alias.co 'checkout'
+## alias naming: <co><h>
+git config --global alias.coh '!sh -c '"'git checkout head\${1:-~1}' - " # git coh [SUFFIX-TO-BE-APPENDED-TO-HEAD]; make head pointing to the specified commit, which by default is head~1, e.g. git cofh \~1 PATH-SPEC
 ## alias naming: <co><f|p>[h|hc]
 git config --global alias.cof 'checkout -f'
-git config --global alias.cofh '!sh -c '"'git checkout -f head\${1} -- \${@:2}' - " # e.g. git cofh \~1 PATH-SPEC; # the alias suffix 'h' means Head
-git config --global alias.cofhc '!sh -c '"'git checkout -f head -- \${@:1}' - " # git cofhc PATH-SPEC; # the alias suffix 'c' refers the commit Currently pointed by head
-git config --global alias.coph '!sh -c '"'git checkout -p head\${1} -- \${@:2}' - " # e.g. git coph \~1 [PATH-SPEC]
+git config --global alias.cofh '!sh -c '"'git checkout -f head\${1} -- \${@:2}' - " # git cofh [SUFFIX-TO-BE-APPENDED-TO-HEAD]; the alias suffix 'h' means Head
+git config --global alias.cofhc '!sh -c '"'git checkout -f head -- \${@:1}' - " # git cofhc <PATH-SPEC>; the alias suffix 'c' refers the commit Currently pointed by head
+git config --global alias.coph '!sh -c '"'git checkout -p head\${1} -- \${@:2}' - " # e.g. git coph [SUFFIX-TO-BE-APPENDED-TO-HEAD] [PATH-SPEC]
 git config --global alias.cophc '!sh -c '"'git checkout -p head -- \${@:1}' - " # git cophc [PATH-SPEC]
 ## alias naming: <co><b|ou|th>
 git config --global alias.cob 'checkout -b'
-git config --global alias.coou 'checkout --ours'
+git config --global alias.coou 'checkout --ours' # e.g. git coou .; git coou *java;
 git config --global alias.coth 'checkout --theirs'
 
 # [merge]
@@ -97,14 +99,18 @@ git config --global alias.cm 'commit'
 git config --global alias.cmm 'commit -m'
 git config --global alias.cmad 'commit --amend'
 
-git config --global alias.cma 'commit -a'
+git config --global alias.cma 'commit -a' # -a automatically stage files that have been modified and deleted, but new files you have not told Git about are not affected.
 git config --global alias.cmp 'commit -p' # git cmp [PATHSPEC]
 
-git config --global alias.cmam 'commit -a -m' # git cmam COMMIT-MSG
-git config --global alias.cmpm 'commit -p -m' # git cmpm COMMIT-MSG [PATHSPEC]
+git config --global alias.cmam 'commit -a -m' # git cmam <COMMIT-MSG>
+git config --global alias.cmpm 'commit -p -m' # git cmpm <COMMIT-MSG> [PATHSPEC]
 
 git config --global alias.cmaad 'commit -a --amend'
 git config --global alias.cmpad 'commit -p --amend'
+
+## alias naming: <cm><ae>[m]
+git config --global alias.cmae 'commit --allow-empty' # allow making a commit with an unchanged tree, which can be useful for adding a version number
+git config --global alias.cmaem 'commit --allow-empty -m'
 
 # [rebase]
 git config --global alias.rb 'rebase'
@@ -116,7 +122,7 @@ git config --global alias.rbi 'rebase -i'
 git config --global alias.rbir 'rebase -i --root'
 ## alias 'rbip' example:
 ## say you have created a branch from master for a hot fix issue and you would like to edit your hot fix commits, `git rbip master` may help
-git config --global alias.rbip '!sh -c '"'git rebase -i \"\$1\"~1' - " # rebase on the parent of the specified commit, e.g. on head~1~1 if head~1 is specified; # the alias suffix 'p' refers to the Parent commit of the specified commit
+git config --global alias.rbip '!sh -c '"'git rebase -i \"\$1\"~1' - " # rebase on the parent of the specified commit, e.g. on head~1~1 if head~1 is specified; the alias suffix 'p' refers to the Parent commit of the specified commit
 git config --global alias.rbihp '!sh -c '"'git rebase -i head\"\$1\"~1' - " # rebase on the parent of the specified commit, e.g. on head~2~1 if \~1 is specified
 
 # [cherry-pick]
@@ -144,8 +150,9 @@ git config --global alias.air 'git add --ignore-removal .'
 ## example: say you have created a branch from master for a hot fix issue and you would like to view the commits made for the issue, `git l master..` may help
 git config --global alias.l 'log'
 
-## Search across all branches / through current branch for (own) commits by commit messages / committed changes
-### usage: git ALIAS COMMIT-MSG-OR-COMMITED-CHANGES
+## List (own) commits, OR
+## search across all branches / through current branch for (own) commits (by commit messages / committed changes)
+### usage: git ALIAS [COMMIT-MSG-OR-COMMITED-CHANGES]
 ### alias naming: <l>[a|c][o|p|st][r][i][s|ge|gr]
 ### example: when you would like to read the commit message for a specific line of code, `git las 'THE-LINE-OF-CODE'` may help
 ### example: say you would like to view all your commits on the current branch, `git lco` may help
@@ -196,7 +203,7 @@ do
                 if [[ -z "$(echo $p5 | sed 's/://')" ]]
                 then
                     #### alias naming: <l>[c][o|p|st][r]<ph>
-                    #### usage: git ALIAS COMMIT-POINTER-OR-COMMIT-HASH
+                    #### usage: git ALIAS <COMMIT-POINTER-OR-COMMIT-HASH>
                     aliasName="l${p2%:*}${p3%:*}${p4%:*}ph"
                     aliasCmd="${p2#*:} ${p3#*:} ${p4#*:}"
                     aliasCmd="\"git log ${aliasCmd} \${1}~1..head\"" # PARENT-OF-SPECIFIED-COMMIT..head instead of SPECIFIED-COMMIT..head to include the specified commit in the log view
@@ -204,7 +211,7 @@ do
                     sh -c "git config --global alias.${aliasName} '${aliasCmd}'"
                 else
                     #### alias naming: <l>[c][o|p|st][r][i]<s|ge|gr><ph>
-                    #### usage: git ALIAS COMMIT-MSG-OR-COMMITTED-CHNAGES
+                    #### usage: git ALIAS <COMMIT-MSG-OR-COMMITTED-CHNAGES>
                     aliasName="l${p2%:*}${p3%:*}${p4%:*}${p5%:*}ph"
                     aliasCmdPart1="git log ${p2#*:} ${p5#*:} '\\\${1}' --pretty='%h' | head -1" # get the most recent commit among the search result
                     aliasCmdPart2="xargs -o -I{} git log ${p2#*:} ${p3#*:} ${p4#*:} {}~1..head"
@@ -220,11 +227,12 @@ done
 ## Search for own commit and rebase on its parent
 ### usage: git ALIAS
 git config --global alias.lcrbp '!sh -c '"'git rebase -i \$(git log --committer \"$myGitUserEmail\" --oneline --reverse --pretty=\"%h\" | head -1)~1'" # rebase on the parent of your earliest commit on the current branch. it will fail if no such parent.
-### usage: git ALIAS COMMIT-MSG
+### usage: git ALIAS <COMMIT-MSG>
 git config --global alias.lcgrrbp '!sh -c '"'git log --committer \"$myGitUserEmail\" --pretty=\"%h\" --grep \"\$1\" -1 | xargs -o -I@ git rebase -i @~1' - " # rebase on the parent of the 1st search result. it will fail if no such parent.
 git config --global alias.lcigrrbp '!sh -c '"'git log --committer \"$myGitUserEmail\" --pretty=\"%h\" -i --grep \"\$1\" -1 | xargs -o -I@ git rebase -i @~1' - " # rebase on the parent of the 1st search result. it will fail if no such parent.
 ### usage: git log ... | git ALIAS
 git config --global alias.awkrbip '!sh -c '"\"awk 'NR=1{print \\\$1}' | xargs -o -I{} git rebase -i {}~1\"" # crop the commit hash from the 1st line of previous git command output and rebase on its parent. it will fail if no such parent.
+### In general, `git lcrbp` and `git rbip THE-BRANCH-FROM-WHICH-THE-CURRENT-BRANCH-WAS-CREATED` are already good enough to fulfil our git-rebase need
 
 ## Graph
 git config --global alias.laog 'log --graph --oneline --all'
@@ -242,7 +250,7 @@ stashPushAlias='stsps'
 sh -c "git config --global alias.${stashPushAlias} 'stash'"
 git config --global alias.sts 'stash' # shorthand alternative for stash push
 sh -c "git config --global alias.${stashPushAlias}m 'stash -m'"
-sh -c "git config --global alias.${stashPushAlias}k 'stash -k'" # -k, i.e. --keep-index (All changes already added to the index are left intact)
+sh -c "git config --global alias.${stashPushAlias}k 'stash -k'" # -k, i.e. --keep-index (all changes already added to the index are left intact)
 sh -c "git config --global alias.${stashPushAlias}km 'stash -k -m'"
 
 sh -c "git config --global alias.${stashPushAlias}u 'stash -u'" # -u, i.e. --include-untracked
@@ -272,20 +280,27 @@ git config --global alias.stsshu 'stash show -u' # -u, i.e. --include-untracked
 git config --global alias.stsshp 'stash show -p'
 git config --global alias.stsshpu 'stash show -p -u'
 
-## pop, drop, clear
+### pop, drop, clear
 git config --global alias.stspo 'stash pop'
 git config --global alias.stsd 'stash drop'
 git config --global alias.stsc 'stash clear'
 
-## Checkout specific file(s) in a specific stash entry
-git config --global alias.stscof '!sh -c '"'git checkout -f stash@{\$1:-0} -- \${@:2}' - " # git stscof STASH-ENTRY-NUMBER PATHSPEC; # defailt stash@{0}
-git config --global alias.stscop '!sh -c '"'git checkout -p stash@{\$1:-0} -- \${@:2}' - " # git stscop STASH-ENTRY-NUMBER [PATHSPEC]; # default stash@{0}
+### Checkout specific file(s) in a specific stash entry
+git config --global alias.stscof '!sh -c '"'git checkout -f stash@\{\${1:-0}\} -- \${@:2}' - " # git stscof [<STASH-ENTRY-NUMBER> [PATHSPEC]]; default: stash@{0}
+git config --global alias.stscop '!sh -c '"'git checkout -p stash@\{\${1:-0}\} -- \${@:2}' - " # git stscop [<STASH-ENTRY-NUMBER> [PATHSPEC]]; default: stash@{0}
 
-## stash > stash apply
+### stash > stash apply
 git config --global alias.sts-aiq '!sh -c '"'git ${stashPushAlias}\"\$@\" && git stash apply --index -q' - " # git sts-aiq [SUFFIX-TO-FORM-STASH-PUSH-ALIAS [ARGUMENTS-TO-STASH-PUSH]]
 
-## reset --hard > stash apply
-git config --global alias.rshqstsai '!sh -c '"'git reset --hard -q && git stash apply --index \"\${1:-0}\"' - " # git rshqstsa STASH-ENTRY; # default stash@{0}
+### diff stash@{?}
+#### Use below alias to ensure no needed change is missed when the stash becomes messy
+git config --global alias.dsts '!sh -c '"'git diff stash@\{\${1:-0}\}' - " # git dsts [STASH-ENTRY-NUMBER]; default: stash@{0}
+
+### add > stash apply
+git config --global alias.austsa '!sh -c '"'git au && git stash apply \"\${1:-0}\"' - " # git austsa [STASH-ENTRY]; default: stash@{0}
+
+### reset --hard > stash apply
+git config --global alias.rshqstsai '!sh -c '"'git reset --hard -q && git stash apply --index \"\${1:-0}\"' - " # git rshqstsai [STASH-ENTRY]; default: stash@{0}
 
 # [diff]
 ## suggested to call below aliases to check your change before making a new commit or amending your previous commit, especially when there is time-consuming git-hook work for commit
@@ -306,7 +321,7 @@ git config --global alias.dcnushp 'diff --cached --numstat head~1'
 
 # [show]
 git config --global alias.shw 'show'
-git config --global alias.lfshw '!sh -c '"\"git ls-files -- '\$2' | xargs -o -I@ git show '\$1':@\" - " # git shw COMMIT FILE
+git config --global alias.lfshw '!sh -c '"\"git ls-files -- '\$2' | xargs -o -I@ git show '\$1':@\" - " # git shw <COMMIT> <FILE>
 
 # [reset]
 git config --global alias.rs 'reset' # pls rmb to enclose your argument with quotes or prepend * with \; otherwise, * will be firstly expanded by your shell before passing to Git
@@ -318,13 +333,13 @@ git config --global alias.rss 'reset --soft'
 git config --global alias.rto 'restore'
 
 # [tag]
-# making a good use of tag would allow a quick Git operation, e.g. git rbip TAG-OF-MY-EARLIEST-COMMIT-FOR-CURRENT-TASK
-git config --global alias.t 'tag'
+git config --global alias.t 'tag' # git t <TAG-NAME> [COMMIT(S)]; default: current commit
 git config --global alias.ta 'tag -a'
-git config --global alias.tam '!sh -c '"'git tag -a \"\$1\" -m \"\$2\"' - "
+git config --global alias.tam '!sh -c '"'git tag -a \"\$1\" -m \"\$2\"' - " # git tam <TAG-NAME> <TAG-MESSAGE>
 git config --global alias.tl 'tag -l' # pls rmb to enclose your argument with quotes or prepend * with \; otherwise, * will be firstly expanded by your shell before passing to Git
-git config --global alias.tf 'tag -f'
-git config --global alias.td 'tag -d'
+git config --global alias.tf 'tag -f' # git tf <TAG-NAME> [commit]; make a tag pointing to another commit, which by default is head
+git config --global alias.taf 'tag -af' # move a tag and force-create an annotated tag
+git config --global alias.td 'tag -d' # git td <TAG-NAME>; delete a tag in the local repository
 
 # [submodule]
 git config --global alias.sm 'submodule'
@@ -343,7 +358,7 @@ git config --global alias.brav 'branch -av'
 git config --global alias.bravv 'branch -avvv'
 
 ## alias naming: <br><f|m|d|dd>
-git config --global alias.brf 'branch -f' # change to point to another commit; git brf <BRANCH-NAME> [<NEW-TIP-COMMIT>];
+git config --global alias.brf 'branch -f' # change to point to another commit, which by default is the head; git brf <BRANCH-NAME> [<NEW-TIP-COMMIT>];
 GIT config --global alias.brm 'branch -m' # rename branch; git brm <NEW-NAME|<OLD-NAME> <NEW-NAME>>;
 git config --global alias.brd 'branch -d'
 git config --global alias.brdd 'branch -D'
