@@ -334,7 +334,7 @@ git config --global alias.rto 'restore'
 
 # [tag]
 # alias naming: <t>[a][m|f]
-git config --global alias.t 'tag' # git t <TAG-NAME> [COMMIT]; default: current commit
+git config --global alias.t 'tag' # git t [TAG-NAME [COMMIT]]; list all tags or create a lightweight tag, which by default points to the current commit
 git config --global alias.ta 'tag -a'
 git config --global alias.tam '!sh -c '"'git tag -a \"\$1\" -m \"\$2\"' - " # git tam <TAG-NAME> <TAG-MESSAGE>
 git config --global alias.tf 'tag -f' # git tf <TAG-NAME> [commit]; make a tag pointing to another commit, which by default is head
