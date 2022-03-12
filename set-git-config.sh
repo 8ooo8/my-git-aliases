@@ -59,6 +59,7 @@ git config --global alias.clo 'clone'
 
 # [pull]
 git config --global alias.pl 'pull'
+git config --global alias.plal 'pull --all'
 git config --global alias.plrs 'pull --recurse-submodules'
 
 # [fetch]
@@ -114,6 +115,7 @@ git config --global alias.cmaem 'commit --allow-empty -m'
 
 # [rebase]
 git config --global alias.rb 'rebase'
+git config --global alias.rbot 'rebase --onto'
 git config --global alias.rba 'rebase --abort'
 git config --global alias.rbc 'rebase --continue'
 git config --global alias.rbs 'rebase --skip'
