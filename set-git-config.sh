@@ -350,7 +350,7 @@ git config --global alias.sm 'submodule'
 git config --global alias.smui 'submodule update --init'
 
 # [branch]
-## alias naming: <br>[a][l|v|vv]
+## alias naming: <br>[a|r][l|v|vv]
 git config --global alias.br 'branch'
 git config --global alias.brl 'branch -l'
 git config --global alias.brv 'branch -v'
@@ -360,6 +360,11 @@ git config --global alias.bra 'branch -a'
 git config --global alias.bral 'branch -al'
 git config --global alias.brav 'branch -av'
 git config --global alias.bravv 'branch -avvv'
+
+git config --global alias.brr 'branch -r'
+git config --global alias.brrl 'branch -rl'
+git config --global alias.brrv 'branch -rv'
+git config --global alias.brrvv 'branch -rvvv'
 
 ## alias naming: <br><f|m|d|dd>
 git config --global alias.brf 'branch -f' # change to point to another commit, which by default is the head; git brf <BRANCH-NAME> [<NEW-TIP-COMMIT>];
