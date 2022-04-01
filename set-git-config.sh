@@ -323,7 +323,7 @@ git config --global alias.dcnushp 'diff --cached --numstat head~1'
 
 # [show]
 git config --global alias.shw 'show'
-git config --global alias.lfshw '!sh -c '"\"git ls-files -- '\$2' | xargs -o -I@ git show '\$1':@\" - " # git shw <COMMIT> <FILE>
+git config --global alias.lfshw '!sh -c '"\"git ls-files -- '\$2' | xargs -o -I@ git show '\$1':@\" - " # git lfshw <COMMIT> <FILE>
 
 # [reset]
 git config --global alias.rs 'reset' # pls rmb to enclose your argument with quotes or prepend * with \; otherwise, * will be firstly expanded by your shell before passing to Git
@@ -347,7 +347,11 @@ git config --global alias.td 'tag -d' # git td <TAG-NAME(S)>; delete a tag in th
 
 # [submodule]
 git config --global alias.sm 'submodule'
-git config --global alias.smui 'submodule update --init'
+git config --global alias.smuirc 'submodule update --init --recursive'
+git config --global alias.smurmrc 'submodule update --remote --merge --recursive'
+git config --global alias.sma 'submodule add'
+git config --global alias.smsb 'submodule set-branch'
+git config --global alias.smsu 'submodule set-url'
 
 # [branch]
 ## alias naming: <br>[a|r][l|v|vv]
