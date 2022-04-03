@@ -75,9 +75,9 @@ git config --global alias.co 'checkout'
 git config --global alias.coh '!sh -c '"'git checkout head\${1:-~1}' - " # git coh [SUFFIX-TO-BE-APPENDED-TO-HEAD]; make head pointing to the specified commit, which by default is head~1, e.g. git cofh \~1 PATH-SPEC
 ## alias naming: <co><f|p>[h|hc]
 git config --global alias.cof 'checkout -f'
-git config --global alias.cofh '!sh -c '"'git checkout -f head\${1} -- \${@:2}' - " # git cofh [SUFFIX-TO-BE-APPENDED-TO-HEAD]; the alias suffix 'h' means Head
+git config --global alias.cofh '!sh -c '"'git checkout -f head\${1} -- \${@:2}' - " # git cofh [<SUFFIX-TO-BE-APPENDED-TO-HEAD> [PATH-SPEC]]; the alias suffix 'h' means Head
 git config --global alias.cofhc '!sh -c '"'git checkout -f head -- \${@:1}' - " # git cofhc <PATH-SPEC>; the alias suffix 'c' refers the commit Currently pointed by head
-git config --global alias.coph '!sh -c '"'git checkout -p head\${1} -- \${@:2}' - " # e.g. git coph [SUFFIX-TO-BE-APPENDED-TO-HEAD] [PATH-SPEC]
+git config --global alias.coph '!sh -c '"'git checkout -p head\${1} -- \${@:2}' - " # git coph [<SUFFIX-TO-BE-APPENDED-TO-HEAD> [PATH-SPEC]]
 git config --global alias.cophc '!sh -c '"'git checkout -p head -- \${@:1}' - " # git cophc [PATH-SPEC]
 ## alias naming: <co><b|ou|th>
 git config --global alias.cob 'checkout -b'
