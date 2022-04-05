@@ -72,10 +72,10 @@ git config --global alias.remv 'remote -v'
 # [checkout]
 git config --global alias.co 'checkout'
 ## alias naming: <co><h>
-git config --global alias.coh '!sh -c '"'git checkout head\${1:-~1}' - " # git coh [SUFFIX-TO-BE-APPENDED-TO-HEAD]; make head pointing to the specified commit, which by default is head~1, e.g. git cofh \~1 PATH-SPEC
+git config --global alias.coh '!sh -c '"'git checkout head\${1:-~1}' - " # git coh [<SUFFIX-TO-BE-APPENDED-TO-HEAD> [PATH-SPEC]]; the alias suffix 'h' means Head
 ## alias naming: <co><f|p>[h|hc]
 git config --global alias.cof 'checkout -f'
-git config --global alias.cofh '!sh -c '"'git checkout -f head\${1} -- \${@:2}' - " # git cofh [<SUFFIX-TO-BE-APPENDED-TO-HEAD> [PATH-SPEC]]; the alias suffix 'h' means Head
+git config --global alias.cofh '!sh -c '"'git checkout -f head\${1} -- \${@:2}' - " # git cofh [<SUFFIX-TO-BE-APPENDED-TO-HEAD> [PATH-SPEC]];
 git config --global alias.cofhc '!sh -c '"'git checkout -f head -- \${@:1}' - " # git cofhc <PATH-SPEC>; the alias suffix 'c' refers the commit Currently pointed by head
 git config --global alias.coph '!sh -c '"'git checkout -p head\${1} -- \${@:2}' - " # git coph [<SUFFIX-TO-BE-APPENDED-TO-HEAD> [PATH-SPEC]]
 git config --global alias.cophc '!sh -c '"'git checkout -p head -- \${@:1}' - " # git cophc [PATH-SPEC]
@@ -251,19 +251,19 @@ git config --global alias.sttv 'status -v'
 stashPushAlias='stsps'
 sh -c "git config --global alias.${stashPushAlias} 'stash'"
 git config --global alias.sts 'stash' # shorthand alternative for stash push
-sh -c "git config --global alias.${stashPushAlias}m 'stash -m'"
-sh -c "git config --global alias.${stashPushAlias}k 'stash -k'" # -k, i.e. --keep-index (all changes already added to the index are left intact)
-sh -c "git config --global alias.${stashPushAlias}km 'stash -k -m'"
+sh -c "git config --global alias.${stashPushAlias}m 'stash push -m'"
+sh -c "git config --global alias.${stashPushAlias}k 'stash push -k'" # -k, i.e. --keep-index (all changes already added to the index are left intact)
+sh -c "git config --global alias.${stashPushAlias}km 'stash push -k -m'"
 
-sh -c "git config --global alias.${stashPushAlias}u 'stash -u'" # -u, i.e. --include-untracked
-sh -c "git config --global alias.${stashPushAlias}um 'stash -u -m'"
-sh -c "git config --global alias.${stashPushAlias}uk 'stash -u -k'"
-sh -c "git config --global alias.${stashPushAlias}ukm 'stash -u -k -m'"
+sh -c "git config --global alias.${stashPushAlias}u 'stash push -u'" # -u, i.e. --include-untracked
+sh -c "git config --global alias.${stashPushAlias}um 'stash push -u -m'"
+sh -c "git config --global alias.${stashPushAlias}uk 'stash push -u -k'"
+sh -c "git config --global alias.${stashPushAlias}ukm 'stash push -u -k -m'"
 
-sh -c "git config --global alias.${stashPushAlias}a 'stash -a'" # -a, i.e. --all (tracked, untracked and ignored files are all put into the stash)
-sh -c "git config --global alias.${stashPushAlias}am 'stash -a -m'"
-sh -c "git config --global alias.${stashPushAlias}ak 'stash -a -k'"
-sh -c "git config --global alias.${stashPushAlias}akm 'stash -a -k -m'"
+sh -c "git config --global alias.${stashPushAlias}a 'stash push -a'" # -a, i.e. --all (tracked, untracked and ignored files are all put into the stash)
+sh -c "git config --global alias.${stashPushAlias}am 'stash push -a -m'"
+sh -c "git config --global alias.${stashPushAlias}ak 'stash push -a -k'"
+sh -c "git config --global alias.${stashPushAlias}akm 'stash push -a -k -m'"
 
 ## list
 git config --global alias.stsl 'stash list'
@@ -331,7 +331,7 @@ git config --global alias.rs 'reset' # pls rmb to enclose your argument with quo
 git config --global alias.rsh 'reset --hard'
 git config --global alias.rss 'reset --soft'
 
-# [reset]
+# [restore]
 git config --global alias.rto 'restore'
 
 # [tag]
