@@ -1,16 +1,19 @@
 # My Git aliases
 
-This repository shares my **Git aliases** which is a **good fit** into environment that:
+The Git operations can be intensive for various reasons, for example,
 
-1. **runs code review**, which requires an intensive modification of the old commits
-    1. it allows a quick search, review and rebase of own commits on the current branch
-    1. it provides handy stash aliases to quickly save down the current change for future use, e.g. move the current change to a specific commit, help learn about the huge code base using trial-and-error approach
-1. **needs to search through the commits to find out the reference code/information** to assist the development
-    1. it allows a quick search and review of the commits based on either their commit messages or content
+1. to deliver quality code, it is suggested to review our working directory before making a commit
+1. the team runs code review and therefore need to frequently modify previous commits
+1. need to review own commits because the code review feedback for one of our commits actually affects the others
+1. distracted by other tasks and hence forget what we have made to the codebases
+1. need to search for the commits of similar features as a reference for the new feature development, to help avoid mistakenly missing something in our implementation
+1. too many unknowns with the huge and complex codebases and may need to use stash to temporarily store the code changes made during the PoC or trial-and-error
+1. ...
+
+
+Therefore, I have written this [script][config-sh] to set up my Git aliases. Yet, this is quite complicated, but the aliases have their patterns to help your memorization and once you get used to them, your productivity will have a nice improvement.
 
 # Quick start
-
-_Please note that this script is still frequently updated and not yet come to its final shape._
 
 1. clone the project
     ```zsh
