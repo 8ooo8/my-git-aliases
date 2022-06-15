@@ -64,6 +64,7 @@ git config --global alias.plrs 'pull --recurse-submodules'
 
 # [fetch]
 git config --global alias.fe 'fetch'
+git config --global alias.feal 'fetch --all'
 
 # [remote]
 git config --global alias.rem 'remote'
