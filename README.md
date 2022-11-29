@@ -11,7 +11,7 @@ The Git operations can be intensive for various reasons, for example,
 1. ...
 
 
-Therefore, I have written this [script][config-sh] to set up my Git aliases. Yet, this is quite complicated, but the aliases have their patterns to help your memorization and once you get used to them, your productivity will have a nice improvement.
+Therefore, I have written this [script][config-sh] to set up my Git aliases. Yet, this is quite complicated, but the aliases follow certin patterns to help you memorize them and once you get used to them, your productivity will be significantly improved.
 
 # Quick start
 
@@ -34,6 +34,7 @@ Therefore, I have written this [script][config-sh] to set up my Git aliases. Yet
         myGitUserEmail='ben.cky.workspace@gmail.com'
         myEditor='nvim'
         myPager='less'
+        myGerritRemote='origin'
         ```
     1. add your own aliases or/and configuration, possibly specific for your company, e.g. set the git hooks
         ```zsh

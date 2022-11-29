@@ -4,6 +4,7 @@ myGitUserName='8ooo8'
 myGitUserEmail='ben.cky.workspace@gmail.com'
 myEditor='nvim'
 myPager='less'
+myGerritRemote='origin'
 
 # -- user --
 git config --global user.name "$myGitUserName"
@@ -52,7 +53,7 @@ git config --global alias.ps 'push'
 git config --global alias.psu 'push -u'
 git config --global alias.psta 'push --tags'
 git config --global alias.psd 'push -d'
-git config --global alias.psge '!sh -c '"'git push origin HEAD:refs/for/\"\$1\"' - " # git psge <BRANCH-NAME>; this alias pushes to Gerrit and assumed the Gerrit remote branch is named as origin
+git config --global alias.psge '!sh -c '"'git push $myGerritRemote HEAD:refs/for/\"\$1\"' - " # git psge <BRANCH-NAME>
 
 # [clone]
 git config --global alias.clo 'clone'
