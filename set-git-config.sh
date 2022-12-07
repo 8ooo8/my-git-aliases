@@ -142,9 +142,9 @@ git config --global alias.rvtc 'revert --continue'
 git config --global alias.rvts 'revert --skip'
 
 # [add]
-git config --global alias.a 'add'
-git config --global alias.aa 'add -A'
-git config --global alias.au 'add -u'
+git config --global alias.a 'add' # note that `git add .` does not stage the deleted files
+git config --global alias.aa 'add -A' # -A means --all
+git config --global alias.au 'add -u' # -u means untracked files, i.e. not including new files
 git config --global alias.ap 'add -p'
 git config --global alias.ai 'add -i'
 git config --global alias.air 'git add --ignore-removal .'
@@ -166,7 +166,7 @@ logAliasesPart2=(':' 'a:--all' "c:--committer \"$myGitUserEmail\"")
 logAliasesPart3=(':' 'o:--oneline' 'p:-p' 'st:--stat')
 logAliasesPart4=(':' 'r:--reverse')
 logAliasesPart5=(':' 'i:-i')
-logAliasesPart6=(':' 's:-S' 'ge:-G' 'gr:--grep')
+logAliasesPart6=(':' 's:-S' 'ge:-G' 'gr:--grep') # to search the commited changes: -S (by string), -G (by regex); to search the commit msg: --grep (by string)
 for p2 in "${logAliasesPart2[@]}"
 do
     for p3 in "${logAliasesPart3[@]}"
@@ -324,7 +324,7 @@ git config --global alias.dnushp 'diff --numstat head~1'
 git config --global alias.dcnushp 'diff --cached --numstat head~1'
 
 # [show]
-git config --global alias.shw 'show'
+git config --global alias.shw 'show' # git show [<options>] [<object>…]; <object>…: defaults to HEAD & if only specifying the filepath, it has to be in glob pattern
 git config --global alias.lfshw '!sh -c '"\"git ls-files -- '\$2' | xargs -o -I@ git show '\$1':@\" - " # git lfshw <COMMIT> <FILE>
 
 # [reset]
