@@ -51,8 +51,10 @@ git config --global alias.cfgl 'config --global --list'
 # [push]
 git config --global alias.ps 'push'
 git config --global alias.psu 'push -u'
-git config --global alias.psta 'push --tags'
-git config --global alias.psd 'push -d'
+## note that to push specific tag, use `git push <REMOTE> <TAGNAME>`
+git config --global alias.psta 'push --tags' # git psta [REMOTE]; all refs under refs/tags are pushed, in addition to refspecs explicitly listed on the command line.
+git config --global alias.psfta 'push --follow-tags' # git psfta [REMOTE]; push all the refs that would be pushed without this option, and also push ANNOTATED tags in refs/tags that are missing from the remote but are pointing at commit-ish that are reachable from the refs being pushed
+git config --global alias.psd 'push -d' # common usage: git psd <REMOTE> <TAGNAME>
 git config --global alias.psge '!sh -c '"'git push $myGerritRemote HEAD:refs/for/\"\$1\"' - " # git psge <BRANCH-NAME>
 
 # [clone]
@@ -73,6 +75,7 @@ git config --global alias.remv 'remote -v'
 
 # [checkout]
 ## Note that to prevent our shell expend the pathspec, which takes wildcard char, quotes or backslash is needed.
+## https://css-tricks.com/git-pathspecs-and-how-to-use-them/ for more info.
 git config --global alias.co 'checkout'
 ## alias naming: <co><h>
 git config --global alias.coh '!sh -c '"'git checkout head\${1:-~1}' - " # git coh [<SUFFIX-TO-BE-APPENDED-TO-HEAD> [PATHSPEC]]; the alias suffix 'h' means Head
@@ -343,14 +346,14 @@ git config --global alias.rto 'restore'
 
 # [tag]
 ## alias naming: <t>[a][m|f]
-git config --global alias.t 'tag' # git t [TAG-NAME [COMMIT]]; list all tags or create a lightweight tag, which by default points to the current commit
+git config --global alias.t 'tag' # git t [TAGNAME [COMMIT]]; list all tags or create a lightweight tag, which by default points to the current commit
 git config --global alias.ta 'tag -a'
-git config --global alias.tam '!sh -c '"'git tag -a \"\$1\" -m \"\$2\"' - " # git tam <TAG-NAME> <TAG-MESSAGE>
-git config --global alias.tf 'tag -f' # git tf <TAG-NAME> [COMMIT]; make a tag pointing to another commit, which by default is head
+git config --global alias.tm '!sh -c '"'git tag \"\$1\" -m \"\$2\"' - " # git tm <TAGNAME> <TAG-MESSAGE>; note that this acutally created an annotated tag but not a lightweight tag
+git config --global alias.tf 'tag -f' # git tf <TAGNAME> [COMMIT]; make a tag pointing to another commit, which by default is head
 git config --global alias.taf 'tag -af' # move a tag and force-create an annotated tag
-# alias naming: <t><l|d>
-git config --global alias.tl 'tag -l' # pls rmb to enclose your argument with quotes or prepend * with \; otherwise, * will be firstly expanded by your shell before passing to Git
-git config --global alias.td 'tag -d' # git td <TAG-NAME(S)>; delete a tag in the local repository
+## alias naming: <t><l|d>
+git config --global alias.tl 'tag -l' # git tl <TAGNAME>; note that <TAGNAME> here takes wildcard chard (quotes or backslash is needed to prevent your shell from expanding it); note that to show more info about the tags, use `git show`
+git config --global alias.td 'tag -d' # git td <TAGNAME>; delete tag(s) in the local repository
 
 # [submodule]
 git config --global alias.sm 'submodule'
