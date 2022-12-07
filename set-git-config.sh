@@ -72,15 +72,16 @@ git config --global alias.rem 'remote'
 git config --global alias.remv 'remote -v'
 
 # [checkout]
+## Note that to prevent our shell expend the pathspec, which takes wildcard char, quotes or backslash is needed.
 git config --global alias.co 'checkout'
 ## alias naming: <co><h>
-git config --global alias.coh '!sh -c '"'git checkout head\${1:-~1}' - " # git coh [<SUFFIX-TO-BE-APPENDED-TO-HEAD> [PATH-SPEC]]; the alias suffix 'h' means Head
+git config --global alias.coh '!sh -c '"'git checkout head\${1:-~1}' - " # git coh [<SUFFIX-TO-BE-APPENDED-TO-HEAD> [PATHSPEC]]; the alias suffix 'h' means Head
 ## alias naming: <co><f|p>[h|hc]
 git config --global alias.cof 'checkout -f'
-git config --global alias.cofh '!sh -c '"'git checkout -f head\${1} -- \${@:2}' - " # git cofh [<SUFFIX-TO-BE-APPENDED-TO-HEAD> [PATH-SPEC]];
-git config --global alias.cofhc '!sh -c '"'git checkout -f head -- \${@:1}' - " # git cofhc <PATH-SPEC>; the alias suffix 'c' refers the commit Currently pointed by head
-git config --global alias.coph '!sh -c '"'git checkout -p head\${1} -- \${@:2}' - " # git coph [<SUFFIX-TO-BE-APPENDED-TO-HEAD> [PATH-SPEC]]
-git config --global alias.cophc '!sh -c '"'git checkout -p head -- \${@:1}' - " # git cophc [PATH-SPEC]
+git config --global alias.cofh '!sh -c '"'git checkout -f head\${1} -- \${@:2}' - " # git cofh [<SUFFIX-TO-BE-APPENDED-TO-HEAD> [PATHSPEC]]; e.g. git cofh \~1 \*XXxx\*
+git config --global alias.cofhc '!sh -c '"'git checkout -f head -- \${@:1}' - " # git cofhc <PATHSPEC>; the alias suffix 'c' refers the commit Currently pointed by head
+git config --global alias.coph '!sh -c '"'git checkout -p head\${1} -- \${@:2}' - " # git coph [<SUFFIX-TO-BE-APPENDED-TO-HEAD> [PATHSPEC]]
+git config --global alias.cophc '!sh -c '"'git checkout -p head -- \${@:1}' - " # git cophc [PATHSPEC]
 ## alias naming: <co><b|ou|th>
 git config --global alias.cob 'checkout -b'
 git config --global alias.coou 'checkout --ours' # e.g. git coou .; git coou *java;
@@ -324,8 +325,12 @@ git config --global alias.dnushp 'diff --numstat head~1'
 git config --global alias.dcnushp 'diff --cached --numstat head~1'
 
 # [show]
-git config --global alias.shw 'show' # git show [<options>] [<object>…]; <object>…: defaults to HEAD & if only specifying the filepath, it has to be in glob pattern
-git config --global alias.lfshw '!sh -c '"\"git ls-files -- '\$2' | xargs -o -I@ git show '\$1':@\" - " # git lfshw <COMMIT> <FILE>
+## git show [<options>] [<object>…]
+## <object>…: defaults to HEAD & https://git-scm.com/docs/gitrevisions for more info
+## common usage 1: git show [PATHSPEC]; e.g. git show \*XXxx\*
+## common usage 2: git show [<REV>:<PATH>]; e.g. git show origin/master:<path>; note that <PATH> cannot take wildcard char 
+git config --global alias.shw 'show'
+git config --global alias.lfshw '!sh -c '"\"git ls-files -- '\$2' | xargs -o -I@ git show '\$1':@\" - " # git lfshw <REV> <PATH>; Note that the ls-files makes wildcard char usable
 
 # [reset]
 git config --global alias.rs 'reset' # pls rmb to enclose your argument with quotes or prepend * with \; otherwise, * will be firstly expanded by your shell before passing to Git
@@ -337,11 +342,11 @@ git config --global alias.rss 'reset --soft'
 git config --global alias.rto 'restore'
 
 # [tag]
-# alias naming: <t>[a][m|f]
+## alias naming: <t>[a][m|f]
 git config --global alias.t 'tag' # git t [TAG-NAME [COMMIT]]; list all tags or create a lightweight tag, which by default points to the current commit
 git config --global alias.ta 'tag -a'
 git config --global alias.tam '!sh -c '"'git tag -a \"\$1\" -m \"\$2\"' - " # git tam <TAG-NAME> <TAG-MESSAGE>
-git config --global alias.tf 'tag -f' # git tf <TAG-NAME> [commit]; make a tag pointing to another commit, which by default is head
+git config --global alias.tf 'tag -f' # git tf <TAG-NAME> [COMMIT]; make a tag pointing to another commit, which by default is head
 git config --global alias.taf 'tag -af' # move a tag and force-create an annotated tag
 # alias naming: <t><l|d>
 git config --global alias.tl 'tag -l' # pls rmb to enclose your argument with quotes or prepend * with \; otherwise, * will be firstly expanded by your shell before passing to Git
