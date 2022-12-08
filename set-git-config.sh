@@ -248,7 +248,7 @@ git config --global alias.laog 'log --graph --oneline --all'
 # [status]
 git config --global alias.stt 'status'
 git config --global alias.sttun 'status -uno' # do not show the untracked files
-git config --global alias.sttua 'status -uall'
+git config --global alias.sttua 'status -uall' # -uall actually is the default value for `git status`
 git config --global alias.sttv 'status -v'
 
 # [stash]
@@ -313,14 +313,14 @@ git config --global alias.rshqstsai '!sh -c '"'git reset --hard -q && git stash 
 # [diff]
 ## suggested to call below aliases to check your change before making a new commit or amending your previous commit, especially when there is time-consuming git-hook work for commit
 ## alias naming: <d>[c][nus][h|hp]
-git config --global alias.d 'diff'
-git config --global alias.dc 'diff --cached'
+git config --global alias.d 'diff' # git d [COMMIT]; show the diff between the working tree and COMMIT, whose defaults is the index
+git config --global alias.dc 'diff --cached' # git dc [COMMIT]; show the diff between index and COMMIT
 git config --global alias.dh 'diff head'
 git config --global alias.dch 'diff --cached head'
 git config --global alias.dhp 'diff head~1'
 git config --global alias.dchp 'diff --cached head~1'
 
-git config --global alias.dnus 'diff --numstat'
+git config --global alias.dnus 'diff --numstat' # show number of added and deleted lines
 git config --global alias.dcnus 'diff --cached --numstat'
 git config --global alias.dnush 'diff --numstat head'
 git config --global alias.dcnush 'diff --cached --numstat head'
@@ -342,7 +342,7 @@ git config --global alias.rsh 'reset --hard'
 git config --global alias.rss 'reset --soft'
 
 # [restore]
-git config --global alias.rto 'restore'
+git config --global alias.rto 'restore' # restore working tree files, by default from the index
 
 # [tag]
 ## alias naming: <t>[a][m|f]
