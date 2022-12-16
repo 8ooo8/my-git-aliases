@@ -128,8 +128,7 @@ git config --global alias.rbs 'rebase --skip'
 git config --global alias.rbed 'rebase --edit-to'
 git config --global alias.rbi 'rebase -i'
 git config --global alias.rbir 'rebase -i --root'
-## alias 'rbip' example:
-## say you have created a branch from master for a hot fix issue and you would like to edit your hot fix commits, `git rbip master` may help
+## alias 'rbip' example: `git rbip origin/branch-name` to modify the commits not yet pushed
 git config --global alias.rbip '!sh -c '"'git rebase -i \"\$1\"~1' - " # rebase on the parent of the specified commit, e.g. on head~1~1 if head~1 is specified; the alias suffix 'p' refers to the Parent commit of the specified commit
 git config --global alias.rbihp '!sh -c '"'git rebase -i head\"\$1\"~1' - " # rebase on the parent of the specified commit, e.g. on head~2~1 if \~1 is specified
 
@@ -298,7 +297,7 @@ git config --global alias.stscof '!sh -c '"'git checkout -f stash@\{\${1:-0}\} -
 git config --global alias.stscop '!sh -c '"'git checkout -p stash@\{\${1:-0}\} -- \${@:2}' - " # git stscop [<STASH-ENTRY-NUMBER> [PATHSPEC]]; default: stash@{0}
 
 ### stash > stash apply
-git config --global alias.sts-aiq '!sh -c '"'git ${stashPushAlias}\"\$@\" && git stash apply --index -q' - " # git sts-aiq [SUFFIX-TO-FORM-STASH-PUSH-ALIAS [ARGUMENTS-TO-STASH-PUSH]]
+git config --global alias.sts-aiq '!sh -c '"'git ${stashPushAlias}\"\$@\" && git stash apply --index -q' - " # git sts-aiq [SUFFIX-TO-FORM-STASH-PUSH-ALIAS [ARGUMENTS-TO-STASH-PUSH]], e.g. git sts-aiq km 'stash-message'
 
 ### diff stash@{?}
 #### Use below alias to ensure no needed change is missed when the stash becomes messy
@@ -340,9 +339,15 @@ git config --global alias.rs 'reset' # pls rmb to enclose your argument with quo
 
 git config --global alias.rsh 'reset --hard'
 git config --global alias.rss 'reset --soft'
+# More `reset` usage:
+# git reset [(--patch | -p)|-q] [<tree-ish>] [--] [<pathspec>] # copy entries from <tree-ish> to the index
+# v.s. `checkout`: `checkout` would change the working tree as well
 
 # [restore]
-git config --global alias.rto 'restore' # restore working tree files, by default from the index
+# --source to restore from a diff commit, --staged & --working-tree to specify where to restore to (by default, it's --working-tree)
+# specify <pathspec> to choose which files to restore & -p for patch-wise restoration
+git config --global alias.rto 'restore'
+git config --global alias.rtoso 'restore --source'
 
 # [tag]
 ## alias naming: <t>[a][m|f]
@@ -387,7 +392,8 @@ git config --global alias.brd 'branch -d'
 git config --global alias.brdd 'branch -D'
 
 # [clean]
-## It is suggested to perform a dry-run first with -n
+## `clean` removes untracked files from the working tree.
+## It is suggested to perform a dry-run first with -n.
 ## alias naming: <cle>[[d][x|xx][e|esh]|i]
 git config --global alias.cle 'clean' # remove non-ignored files
 git config --global alias.cled 'clean -d' # also remove directories
