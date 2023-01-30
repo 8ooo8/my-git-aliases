@@ -164,6 +164,7 @@ git config --global alias.l 'log'
 ### example: when you would like to read the commit message for a specific line of code, `git las 'THE-LINE-OF-CODE'` may help
 ### example: say you would like to view all your commits on the current branch, `git lco` may help
 ### example: say you would like to view your last committed changes, `git lp -1` may help
+### example: say you would like to view your committed changes for a specific file, `git lp '*part-of-the-filename*'` may help
 (
 logAliasesPart2=(':' 'a:--all' "c:--committer \"$myGitUserEmail\"")
 logAliasesPart3=(':' 'o:--oneline' 'p:-p' 'st:--stat')
@@ -401,7 +402,7 @@ git config --global alias.clex 'clean -x' # remove ignored as well as non-ignore
 git config --global alias.clexx 'clean -X' # remove ignored files
 git config --global alias.cledx 'clean -d -x'
 git config --global alias.cledxx 'clean -d -X'
-git config --global alias.clei 'clean -i'
+git config --global alias.clei 'clean -i' # equivalent to --interactive
 
 git config --global alias.clee 'clean -e' # -e, i.e. --exclude (to declare additional ignore rules)
 git config --global alias.clede 'clean -d -e'
