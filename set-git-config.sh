@@ -236,8 +236,8 @@ done
 ### usage: git ALIAS
 git config --global alias.lcrbp '!sh -c '"'git rebase -i \$(git log --committer \"$myGitUserEmail\" --oneline --reverse --pretty=\"%h\" | head -1)~1'" # rebase on the parent of your earliest commit on the current branch. it will fail if no such parent.
 ### usage: git ALIAS <COMMIT-MSG>
-git config --global alias.lcrgrrbp '!sh -c '"'git log --committer \"$myGitUserEmail\" --reverse --pretty=\"%h\" --grep \"\$1\" -1 | xargs -o -I@ git rebase -i @~1' - " # rebase on the parent of the most recent commit whose message matches <COMMIT-MSG>. it will fail if no such parent.
-git config --global alias.lcrigrrbp '!sh -c '"'git log --committer \"$myGitUserEmail\" --reverse --pretty=\"%h\" -i --grep \"\$1\" -1 | xargs -o -I@ git rebase -i @~1' - " # rebase on the parent of the most recent commit whose message matches <COMMIT-MSG>. it will fail if no such parent.
+git config --global alias.lcgrrbp '!sh -c '"'git log --committer \"$myGitUserEmail\" --pretty=\"%h\" --grep \"\$1\" -1 | xargs -o -I@ git rebase -i @~1' - " # rebase on the parent of the most recent commit whose message matches <COMMIT-MSG>. it will fail if no such parent.
+git config --global alias.lcigrrbp '!sh -c '"'git log --committer \"$myGitUserEmail\" --pretty=\"%h\" -i --grep \"\$1\" -1 | xargs -o -I@ git rebase -i @~1' - " # rebase on the parent of the most recent commit whose message matches <COMMIT-MSG>. it will fail if no such parent.
 ### usage: git log ... | git ALIAS
 git config --global alias.awkrbip '!sh -c '"\"awk 'NR=1{print \\\$1}' | xargs -o -I{} git rebase -i {}~1\"" # crop the commit hash from the 1st line of previous git command output and rebase on its parent. it will fail if no such parent.
 ### In general, `git lcrbp` and `git rbip THE-BRANCH-FROM-WHICH-THE-CURRENT-BRANCH-WAS-CREATED` are already good enough to fulfil our git-rebase need
