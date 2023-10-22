@@ -297,8 +297,8 @@ git config --global alias.stsc 'stash clear'
 git config --global alias.stscof '!sh -c '"'git checkout -f stash@\{\${1:-0}\} -- \${@:2}' - " # git stscof [<STASH-ENTRY-NUMBER> [PATHSPEC]]; default: stash@{0}
 git config --global alias.stscop '!sh -c '"'git checkout -p stash@\{\${1:-0}\} -- \${@:2}' - " # git stscop [<STASH-ENTRY-NUMBER> [PATHSPEC]]; default: stash@{0}
 
-### stash > stash apply
-git config --global alias.sts-aiq '!sh -c '"'git ${stashPushAlias}\"\$@\" && git stash apply --index -q' - " # git sts-aiq [SUFFIX-TO-FORM-STASH-PUSH-ALIAS [ARGUMENTS-TO-STASH-PUSH]], e.g. git sts-aiq km 'stash-message'
+### stash > stash apply, to create a temporarily checkpoint for some / all of the changes, while leaving the index & the working tree intact
+git config --global alias.sts-aiq '!sh -c '"'git ${stashPushAlias}\"\$@\" && git stash apply --index -q' - " # git sts-aiq [SUFFIX-TO-FORM-STASH-PUSH-ALIAS [ARGUMENTS-TO-STASH-PUSH]], e.g. git sts-aiq m 'stash-message'
 
 ### diff stash@{?}
 #### Use below alias to ensure no needed change is missed when the stash becomes messy
@@ -312,18 +312,16 @@ git config --global alias.rshqstsai '!sh -c '"'git reset --hard -q && git stash 
 
 # [diff]
 ## suggested to call below aliases to check your change before making a new commit or amending your previous commit, especially when there is time-consuming git-hook work for commit
-## alias naming: <d>[c][nus][h|hp]
-git config --global alias.d 'diff' # git d [COMMIT]; show the diff between the working tree and COMMIT, whose defaults is the index
-git config --global alias.dc 'diff --cached' # git dc [COMMIT]; show the diff between index and COMMIT
-git config --global alias.dh 'diff head'
-git config --global alias.dch 'diff --cached head'
+## alias naming: <d>[nus][h|hp] or <d>[c][nus][hp]
+git config --global alias.d 'diff' # git d [COMMIT]; show the diff between the working tree and COMMIT, whose default is the index
+git config --global alias.dc 'diff --cached' # git dc [COMMIT]; show the diff between index and COMMIT, whose default is HEAD
+git config --global alias.dh 'diff head' # show the diff between the working tree and HEAD
 git config --global alias.dhp 'diff head~1'
 git config --global alias.dchp 'diff --cached head~1'
 
 git config --global alias.dnus 'diff --numstat' # show number of added and deleted lines
 git config --global alias.dcnus 'diff --cached --numstat'
 git config --global alias.dnush 'diff --numstat head'
-git config --global alias.dcnush 'diff --cached --numstat head'
 git config --global alias.dnushp 'diff --numstat head~1'
 git config --global alias.dcnushp 'diff --cached --numstat head~1'
 
@@ -336,9 +334,15 @@ git config --global alias.shw 'show'
 git config --global alias.lfshw '!sh -c '"\"git ls-files -- '\$2' | xargs -o -I@ git show '\$1':@\" - " # git lfshw <REV> <PATH>; Note that the ls-files makes wildcard char usable
 
 # [reset]
-git config --global alias.rs 'reset' # pls rmb to enclose your argument with quotes or prepend * with \; otherwise, * will be firstly expanded by your shell before passing to Git
+# git reset [--soft | --mixed [-N] | --hard | --merge | --keep] [-q] [<commit>]
+# git reset [-q] [<tree-ish>] [--] <pathspec>...
+# git reset [-q] [--pathspec-from-file=<file> [--pathspec-file-nul]] [<tree-ish>]
+# git reset (--patch | -p) [<tree-ish>] [--] [<pathspec>...]
+# This Git command changes, at minimum, HEAD to point to <commit>, which by default is HEAD
+# Pls rmb to enclose your argument with quotes or prepend * with \ when declaring <pathspec>; otherwise, * will be firstly expanded by your shell before passing to Git
+git config --global alias.rs 'reset' # by default, --mixed, which also changes the index
 
-git config --global alias.rsh 'reset --hard'
+git config --global alias.rsh 'reset --hard' # also changes the index & the working directory
 git config --global alias.rss 'reset --soft'
 # More `reset` usage:
 # git reset [(--patch | -p)|-q] [<tree-ish>] [--] [<pathspec>] # copy entries from <tree-ish> to the index
