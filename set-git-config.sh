@@ -99,6 +99,7 @@ git config --global alias.meq 'merge --quit'
 # [reflog]
 git config --global alias.rl 'reflog'
 git config --global alias.rld 'reflog --date=relative'
+git config --global alias.rla 'reflog --all'
 
 # [commit]
 ## alias naming: <cm>[a|p][ad|m]
