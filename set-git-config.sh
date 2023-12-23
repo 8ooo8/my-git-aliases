@@ -71,6 +71,8 @@ git config --global alias.feal 'fetch --all'
 
 # [remote]
 git config --global alias.rem 'remote'
+git config --global alias.rema 'remote add'
+git config --global alias.rems 'remote set-url'
 git config --global alias.remv 'remote -v'
 
 # [checkout]
